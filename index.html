@@ -117,8 +117,24 @@
         .score-input:disabled { color: #aaa !important; cursor: not-allowed; box-shadow: none; border: 1px solid rgba(255,255,255,0.05) !important; }
         
         .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; }
-        .player-bet { text-align: center; background: rgba(255, 255, 255, 0.05); padding: 15px 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 0.9em; font-weight: 600; color: #fff; }
+        .player-bet { position: relative; text-align: center; background: rgba(255, 255, 255, 0.05); padding: 15px 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 0.9em; font-weight: 600; color: #fff; }
         .player-bet input { margin-top: 10px; width: 35px; padding: 6px; font-size: 1em; }
+
+        /* PUNKTY W ROGU OKIENKA */
+        .match-points {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            font-size: 0.7em;
+            color: rgba(255,255,255,0.4);
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            transition: all 0.3s ease;
+        }
+        .match-points.exact { background: rgba(0, 229, 255, 0.2); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.4); }
+        .match-points.partial { background: rgba(105, 240, 174, 0.2); color: #69F0AE; border: 1px solid rgba(105, 240, 174, 0.4); }
 
         input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
@@ -144,9 +160,10 @@
             .match-header { font-size: 1em; gap: 6px; }
             .score-input { width: 35px; padding: 8px; font-size: 1em; }
             .players-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; }
-            .player-bet { padding: 10px 5px; font-size: 0.8em; }
+            .player-bet { padding: 15px 5px 10px 5px; font-size: 0.8em; }
             .player-bet input { width: 30px; padding: 4px; font-size: 0.9em; }
             .stage-btn { font-size: 0.78em; padding: 7px 12px; }
+            .match-points { font-size: 0.65em; top: 4px; right: 4px; padding: 2px 4px; }
         }
     </style>
 </head>
@@ -168,7 +185,7 @@
             <option value="p9">Kamil</option>
             <option value="admin">⭐ Administrator</option>
         </select>
-        <input type="password" id="user-password" placeholder="Wymyśl i zapamiętaj hasło">
+        <input type="password" id="user-password" placeholder="Wpisz hasło od organizatora">
         <button onclick="zaloguj()">Wejdź do gry</button>
     </div>
 </div>
@@ -218,8 +235,20 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ─── LOGOWANIE ───────────────────────────────────────────────────────────────
-const hasloAdmina = "mojetajnehaslo";
+// ─── HASŁA GRACZY (WPISZ NA TWARDO) ──────────────────────────────────────────
+const haslaGraczy = {
+    "p1": "wioletta123",    // <-- Zmień te hasła przed wysłaniem!
+    "p2": "artur123",
+    "p3": "bartek123",
+    "p4": "wiktor123",
+    "p5": "dawid123",
+    "p6": "adam123",
+    "p7": "jan123",
+    "p8": "marcin123",
+    "p9": "kamil123",
+    "admin": "mojetajnehaslo" // <-- Hasło administratora
+};
+
 let myPlayerId = localStorage.getItem('typer_user_id');
 
 window.onload = () => {
@@ -234,23 +263,13 @@ function zaloguj() {
     let sel = document.getElementById('user-selector').value;
     let pass = document.getElementById('user-password').value;
     if (!sel || pass === "") { alert("Wybierz gracza i wpisz hasło!"); return; }
-    if (sel === 'admin') {
-        if (pass === hasloAdmina) { loginSuccess(sel); }
-        else { alert("Błędne hasło administratora!"); }
-        return;
+    
+    // Proste sprawdzanie z naszej bazy haseł w kodzie (omijamy Firebase dla haseł)
+    if (haslaGraczy[sel] === pass) {
+        loginSuccess(sel);
+    } else {
+        alert("Błędne hasło!");
     }
-    db.ref('mundial-hasla/' + sel).once('value').then((snapshot) => {
-        let zapisaneHaslo = snapshot.val();
-        if (zapisaneHaslo === null) {
-            db.ref('mundial-hasla/' + sel).set(pass);
-            alert("Konto zostało pomyślnie zarezerwowane Twoim hasłem!");
-            loginSuccess(sel);
-        } else if (zapisaneHaslo === pass) {
-            loginSuccess(sel);
-        } else {
-            alert("To konto jest już zajęte, a podane hasło jest nieprawidłowe!");
-        }
-    });
 }
 
 function loginSuccess(sel) {
@@ -483,7 +502,9 @@ function renderMatches() {
                 : `<span class="ko-tag">${mecz.stage}</span>`;
 
             const playerBets = gracze.map(g => `
-                <div class="player-bet">${g.name}<br>
+                <div class="player-bet">
+                    <span class="match-points" id="pts-${mecz.id}-${g.id}">0 pkt</span>
+                    ${g.name}<br>
                     <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff;">:<input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff;">
                 </div>`).join('');
 
@@ -563,6 +584,7 @@ function obliczPunkty() {
         gracze.forEach((g, idx) => {
             let betAInput = document.getElementById('bet-'+mecz.id+'-'+g.id+'-a');
             let betBInput = document.getElementById('bet-'+mecz.id+'-'+g.id+'-b');
+            let ptsEl = document.getElementById('pts-'+mecz.id+'-'+g.id);
 
             let betA = betAInput ? betAInput.value : (latestSnapshot['bet-'+mecz.id+'-'+g.id+'-a'] || '');
             let betB = betBInput ? betBInput.value : (latestSnapshot['bet-'+mecz.id+'-'+g.id+'-b'] || '');
@@ -571,13 +593,27 @@ function obliczPunkty() {
                 if (betAInput) { betAInput.disabled = true; betAInput.style.backgroundColor = "rgba(130, 177, 255, 0.15)"; betAInput.style.color = "#fff"; }
                 if (betBInput) { betBInput.disabled = true; betBInput.style.backgroundColor = "rgba(255, 138, 128, 0.15)"; betBInput.style.color = "#fff"; }
 
+                let currentPts = 0;
                 if (betA !== '' && betB !== '') {
                     let ra = parseInt(realA), rb = parseInt(realB);
                     let ba = parseInt(betA), bb = parseInt(betB);
                     let realZnak = Math.sign(ra - rb);
-                    if (ra === ba && rb === bb) { punkty[idx] += 3; }
-                    else if (Math.sign(ba - bb) === realZnak) { punkty[idx] += 1; }
+                    
+                    if (ra === ba && rb === bb) { 
+                        currentPts = 3; 
+                        punkty[idx] += 3; 
+                    } else if (Math.sign(ba - bb) === realZnak) { 
+                        currentPts = 1; 
+                        punkty[idx] += 1; 
+                    }
                 }
+                
+                // Aktualizuj licznik punktów dla tego konkretnego meczu
+                if (ptsEl) {
+                    ptsEl.innerText = currentPts + " pkt";
+                    ptsEl.className = "match-points " + (currentPts === 3 ? "exact" : (currentPts === 1 ? "partial" : ""));
+                }
+
             } else {
                 let isMe = g.id === myPlayerId;
                 let canEdit = isMe || isAdmin;
@@ -597,6 +633,12 @@ function obliczPunkty() {
                     betBInput.disabled = !canEdit;
                     betBInput.style.backgroundColor = canEdit ? "rgba(255, 138, 128, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(255, 138, 128, 0.15)";
                     betBInput.style.color = canEdit ? "#1A0B2E" : "#fff";
+                }
+
+                // Gdy mecz się jeszcze nie odbył, licznik punktów pokazuje szare "0 pkt"
+                if (ptsEl) {
+                    ptsEl.innerText = "0 pkt";
+                    ptsEl.className = "match-points";
                 }
             }
         });

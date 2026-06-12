@@ -57,13 +57,13 @@
 
         h1 { text-align: center; color: #00E5FF; font-weight: 800; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 40px; }
         
-        /* Zmieniony nagłówek dla Rankingu z powitaniem */
+        /* NAGŁÓWEK RANKINGU */
         .ranking-header {
-            display: flex; justify-content: space-between; align-items: baseline;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; margin-bottom: 20px;
+            position: relative; text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; margin-bottom: 20px; min-height: 40px;
         }
-        .ranking-header h2 { margin: 0; border: none; padding: 0; }
-        .welcome-msg { color: #00E5FF; font-weight: 800; font-size: 1.2em; text-shadow: 0 0 8px rgba(0,229,255,0.4); }
+        .ranking-header h2 { margin: 0; border: none; padding: 0; display: inline-block; font-size: 1.8em; color: #FFF; font-weight: 600; }
+        .welcome-msg { position: absolute; right: 0; bottom: 10px; color: #00E5FF; font-weight: 800; font-size: 1.2em; text-shadow: 0 0 8px rgba(0,229,255,0.4); }
 
         h2 { text-align: center; color: #FFF; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; }
 
@@ -92,8 +92,7 @@
 
         /* FILTRY DNI */
         .day-filter-bar {
-            display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
-            margin-bottom: 20px;
+            display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px;
         }
         .day-btn {
             background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);
@@ -104,15 +103,12 @@
         .day-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
         .day-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.4); }
 
-        /* BLOK DNIA */
+        /* BLOK DNIA I MECZU */
         .day-block { margin-bottom: 10px; }
         .day-label {
-            font-size: 0.8em; font-weight: 600; color: rgba(255,255,255,0.45);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
-            margin-bottom: 12px;
+            font-size: 0.8em; font-weight: 600; color: rgba(255,255,255,0.45); text-transform: uppercase;
+            letter-spacing: 1.5px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px;
         }
-
         .match { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px; margin-bottom: 25px; transition: all 0.4s ease; position: relative; }
         .match:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.5); transform: translateY(-3px); }
         .match-header { font-size: 1.3em; font-weight: 800; text-align: center; margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -120,6 +116,15 @@
         
         .group-tag { display: inline-block; border-radius: 20px; padding: 2px 10px; font-size: 0.7em; font-weight: 800; margin-left: 8px; vertical-align: middle; }
         .ko-tag { display: inline-block; background: rgba(255,200,0,0.15); color: #FFD600; border: 1px solid rgba(255,200,0,0.3); border-radius: 20px; padding: 2px 10px; font-size: 0.7em; font-weight: 600; margin-left: 8px; vertical-align: middle; }
+
+        /* --- NOWE STYLE STATUSÓW MECZOWYCH --- */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .status-live { display: inline-block; color: #FF1744; font-weight: 800; font-size: 0.6em; margin-left: 10px; text-shadow: 0 0 10px rgba(255, 23, 68, 0.7); animation: pulse 1.5s infinite; vertical-align: middle; padding: 2px 8px; border-radius: 12px; background: rgba(255, 23, 68, 0.15); border: 1px solid rgba(255, 23, 68, 0.3); }
+        .status-ended { display: inline-block; color: rgba(255,255,255,0.4); font-weight: 600; font-size: 0.6em; margin-left: 10px; vertical-align: middle; padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
         
         .score-input { width: 45px; padding: 10px; text-align: center; font-size: 1.2em; font-weight: 800; border-radius: 10px; color: #1A0B2E; transition: all 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
         .score-input:focus { outline: none; box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
@@ -129,18 +134,8 @@
         .player-bet { position: relative; text-align: center; background: rgba(255, 255, 255, 0.05); padding: 15px 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 0.9em; font-weight: 600; color: #fff; }
         .player-bet input { margin-top: 10px; width: 35px; padding: 6px; font-size: 1em; }
 
-        /* PUNKTY W ROGU OKIENKA */
         .match-points {
-            position: absolute;
-            top: 6px;
-            right: 8px;
-            font-size: 0.7em;
-            color: rgba(255,255,255,0.4);
-            background: rgba(0,0,0,0.3);
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-weight: 800;
-            transition: all 0.3s ease;
+            position: absolute; top: 6px; right: 8px; font-size: 0.7em; color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 6px; font-weight: 800; transition: all 0.3s ease;
         }
         .match-points.exact { background: rgba(0, 229, 255, 0.2); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.4); }
         .match-points.partial { background: rgba(105, 240, 174, 0.2); color: #69F0AE; border: 1px solid rgba(105, 240, 174, 0.4); }
@@ -154,14 +149,10 @@
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; }
-            
-            .logout-btn { 
-                position: static; display: block; margin: 0 auto 20px auto; 
-                padding: 6px 12px; font-size: 0.8em; 
-            }
-
+            .logout-btn { position: static; display: block; margin: 0 auto 20px auto; padding: 6px 12px; font-size: 0.8em; }
             h1 { font-size: 1.8em; margin-bottom: 25px; }
-            .ranking-header { flex-direction: column; align-items: center; gap: 5px; }
+            .ranking-header { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+            .welcome-msg { position: static; }
             h2 { font-size: 1.3em; margin-top: 25px; }
             .login-box { padding: 25px; width: 95%; }
             .login-box select, .login-box input[type="password"], .login-box button { font-size: 1em; padding: 12px; }
@@ -174,6 +165,7 @@
             .player-bet input { width: 30px; padding: 4px; font-size: 0.9em; }
             .stage-btn { font-size: 0.78em; padding: 7px 12px; }
             .match-points { font-size: 0.65em; top: 4px; right: 4px; padding: 2px 4px; }
+            .status-live, .status-ended { display: block; margin-top: 5px; margin-left: 0; }
         }
     </style>
 </head>
@@ -181,7 +173,7 @@
 
 <div id="login-modal">
     <div class="login-box">
-        <h2 style="margin-top: 0;">Wybierz imię i zaloguj się:</h2>
+        <h2 style="margin-top: 0;">Kim jesteś?</h2>
         <select id="user-selector">
             <option value="" disabled selected>-- Wybierz gracza --</option>
             <option value="p1">Wioletta</option>
@@ -203,10 +195,10 @@
 <div class="container">
     <button class="logout-btn" onclick="wyloguj()">Wyloguj / Zmień</button>
     
-    <h1 style="margin-top: 0;">🏆 Typer Mundial 2026</h1>
+    <h1 style="margin-top: 0;">🏆 TYPER MUNDIAL 2026</h1>
 
     <div class="ranking-header">
-        <h2 style="margin: 0; border: none; padding: 0;">Ranking</h2>
+        <h2>Ranking</h2>
         <div class="welcome-msg" id="welcome-msg"></div>
     </div>
     
@@ -251,16 +243,16 @@ const db = firebase.database();
 
 // ─── HASŁA GRACZY (WPISZ NA TWARDO) ──────────────────────────────────────────
 const haslaGraczy = {
-    "p1": "wioletta3293",    // <-- Pamiętaj o reszcie haseł!
-    "p2": "Twistcar1",      // <-- Hasło Artura
-    "p3": "bartek2115",
+    "p1": "wioletta123",    
+    "p2": "Twistcar1",      
+    "p3": "bartek123",
     "p4": "wiktor123",
-    "p5": "dawid6767",
-    "p6": "adam3589",
-    "p7": "jan459",
-    "p8": "marcin0912",
-    "p9": "kamil453",
-    "admin": "mojetajnehaslo" // <-- Hasło administratora
+    "p5": "dawid123",
+    "p6": "adam123",
+    "p7": "jan123",
+    "p8": "marcin123",
+    "p9": "kamil123",
+    "admin": "mojetajnehaslo" 
 };
 
 // ─── GRACZE ──────────────────────────────────────────────────────────────────
@@ -291,7 +283,6 @@ function zaloguj() {
     let pass = document.getElementById('user-password').value;
     if (!sel || pass === "") { alert("Wybierz gracza i wpisz hasło!"); return; }
     
-    // Proste sprawdzanie z naszej bazy haseł w kodzie (omijamy Firebase dla haseł)
     if (haslaGraczy[sel] === pass) {
         loginSuccess(sel);
     } else {
@@ -424,6 +415,19 @@ const harmonogram = [
     { id:104,dom:"🏆 FINAŁ",      wyjazd:"(TBD)", data:"2026-07-19T19:00:00Z", godzPL:"21:00", stage:"Finał", group:null, kolejka:null, venue:"Nowy Jork/New Jersey",         dzien:"Nie, 19 lip" },
 ];
 
+// ─── GRACZE ──────────────────────────────────────────────────────────────────
+const gracze = [
+    { id:'p1', name:'Wioletta' },
+    { id:'p2', name:'Artur' },
+    { id:'p3', name:'Bartek' },
+    { id:'p4', name:'Wiktor' },
+    { id:'p5', name:'Dawid' },
+    { id:'p6', name:'Adam' },
+    { id:'p7', name:'Jan' },
+    { id:'p8', name:'Marcin' },
+    { id:'p9', name:'Kamil' },
+];
+
 // ─── STAN NAWIGACJI ───────────────────────────────────────────────────────────
 const stages = ['Faza grupowa','1/32 finału','1/16 finału','Ćwierćfinały','Półfinały','Finał'];
 let currentStage = 'Faza grupowa';
@@ -447,9 +451,11 @@ const groupColors = {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
-    // Ustawienie powitania w nagłówku
     let myName = myPlayerId === 'admin' ? 'Administratorze 👑' : gracze.find(g => g.id === myPlayerId)?.name || '';
-    document.getElementById('welcome-msg').innerText = `Witaj, ${myName} 👋`;
+    let welcomeEl = document.getElementById('welcome-msg');
+    if (welcomeEl) {
+        welcomeEl.innerText = `Witaj, ${myName} 👋`;
+    }
 
     renderStageNav();
     renderMatches();
@@ -535,6 +541,7 @@ function renderMatches() {
                     <input type="number" class="score-input real-score" id="real-${mecz.id}-b" placeholder="-" style="background: rgba(255, 138, 128, 0.9); border: 2px solid rgba(255, 138, 128, 0.4); color: #1A0B2E;">
                     <span style="color: #FF8A80; text-shadow: 0 0 8px rgba(255, 138, 128, 0.4);">${mecz.wyjazd}</span>
                     ${tagHTML}
+                    <span id="status-${mecz.id}"></span>
                 </div>
                 <div class="match-meta">${mecz.dzien} · godz. ${mecz.godzPL} &nbsp;·&nbsp; ${mecz.venue}</div>
                 <div class="players-grid">${playerBets}</div>
@@ -579,10 +586,12 @@ function syncFromFirebaseSnapshot() {
 function obliczPunkty() {
     let punkty = gracze.map(() => 0);
     let isAdmin = (myPlayerId === 'admin');
+    const teraz = new Date(); // Zegarek systemowy wzięty z urządzenia
 
     harmonogram.forEach(mecz => {
         let realAInput = document.getElementById('real-'+mecz.id+'-a');
         let realBInput = document.getElementById('real-'+mecz.id+'-b');
+        let statusEl = document.getElementById('status-'+mecz.id);
 
         let realA = realAInput ? realAInput.value : (latestSnapshot['real-'+mecz.id+'-a'] || '');
         let realB = realBInput ? realBInput.value : (latestSnapshot['real-'+mecz.id+'-b'] || '');
@@ -598,6 +607,22 @@ function obliczPunkty() {
 
         const matchDiv = document.getElementById('match-div-'+mecz.id);
         if (matchDiv) matchDiv.style.backgroundColor = (realA !== '' && realB !== '') ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.2)";
+
+        const czasRozpoczecia = new Date(mecz.data);
+        const czasZakonczenia = new Date(czasRozpoczecia.getTime() + 115 * 60000); // Mecz + przerwa = ok. 115 minut
+
+        // Zarządzanie statusem MECZU (Zakończony / W trakcie / Oczekiwanie na wynik)
+        if (statusEl) {
+            if (realA !== '' && realB !== '') {
+                statusEl.innerHTML = '<span class="status-ended">ZAKOŃCZONY</span>';
+            } else if (teraz >= czasRozpoczecia && teraz <= czasZakonczenia) {
+                statusEl.innerHTML = '<span class="status-live">🔴 W TRAKCIE</span>';
+            } else if (teraz > czasZakonczenia) {
+                statusEl.innerHTML = '<span class="status-ended" style="color: #FFAB40;">⏳ CZEKA NA WYNIK</span>';
+            } else {
+                statusEl.innerHTML = '';
+            }
+        }
 
         gracze.forEach((g, idx) => {
             let betAInput = document.getElementById('bet-'+mecz.id+'-'+g.id+'-a');
@@ -635,8 +660,6 @@ function obliczPunkty() {
                 let isMe = g.id === myPlayerId;
                 let canEdit = isMe || isAdmin;
 
-                const teraz = new Date();
-                const czasRozpoczecia = new Date(mecz.data);
                 let isTimeLocked = isMe && !isAdmin && (teraz >= czasRozpoczecia);
                 
                 if (isTimeLocked) canEdit = false;

@@ -16,29 +16,38 @@
             padding: 20px; 
         }
 
-        /* EKRAN LOGOWANIA */
-        #login-modal {
+        /* EKRAN LOGOWANIA I ZASAD */
+        #login-modal, #rules-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 5, 20, 0.85);
             backdrop-filter: blur(15px);
             z-index: 1000; display: none; flex-direction: column;
             justify-content: center; align-items: center;
         }
-        .login-box {
+        #rules-modal { z-index: 2000; }
+        
+        .login-box, .rules-box {
             background: rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             text-align: center; max-width: 400px; width: 90%;
         }
+        .rules-box { max-width: 500px; text-align: left; }
+        .rules-box h2 { text-align: center; color: #00E5FF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px; }
+        .rules-box ul { padding-left: 20px; line-height: 1.6; font-size: 0.95em; }
+        .rules-box li { margin-bottom: 10px; }
+        .rules-box strong { color: #00E5FF; }
+
         .login-box select, .login-box input[type="password"] {
             width: 100%; padding: 15px; font-size: 1.2em; border-radius: 10px; margin: 10px 0 20px 0;
             background: rgba(255,255,255,0.9); border: none; font-family: 'Poppins', sans-serif;
             font-weight: 600; color: #1A0B2E; box-sizing: border-box;
         }
-        .login-box button {
+        .login-box button, .rules-box button {
             background: #00E5FF; color: #1A0B2E; border: none; padding: 15px 30px; font-size: 1.2em;
             font-weight: 800; border-radius: 10px; cursor: pointer; width: 100%; transition: 0.3s;
         }
-        .login-box button:hover { background: #00b3cc; transform: scale(1.05); }
+        .rules-box button { margin-top: 15px; }
+        .login-box button:hover, .rules-box button:hover { background: #00b3cc; transform: scale(1.05); }
 
         .container { 
             position: relative;
@@ -55,7 +64,7 @@
         }
         .logout-btn:hover { background: rgba(255,255,255,0.2); }
 
-
+        /* IKONKA INFO */
         .info-btn {
             position: absolute; top: 30px; left: 30px; 
             background: rgba(0, 229, 255, 0.1); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); 
@@ -64,7 +73,6 @@
         }
         .info-btn:hover { background: rgba(0, 229, 255, 0.2); box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); transform: scale(1.1); }
 
-        
         h1 { text-align: center; color: #00E5FF; font-weight: 800; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 40px; }
         
         /* NAGŁÓWEK RANKINGU */
@@ -174,8 +182,9 @@
                 position: static; display: block; margin: 0 auto 20px auto; 
                 padding: 6px 12px; font-size: 0.8em; 
             }
+            .info-btn { top: 15px; left: 15px; width: 35px; height: 35px; font-size: 1.1em; }
 
-            h1 { font-size: 1.8em; margin-bottom: 25px; }
+            h1 { font-size: 1.8em; margin-bottom: 25px; margin-top: 15px; }
             .ranking-header { display: flex; flex-direction: column; align-items: center; gap: 5px; }
             .welcome-msg { position: static; }
             h2 { font-size: 1.3em; margin-top: 25px; }
@@ -217,7 +226,22 @@
     </div>
 </div>
 
+<div id="rules-modal">
+    <div class="rules-box">
+        <h2>📜 Zasady Typera</h2>
+        <ul>
+            <li>Za trafienie <strong>idealnego wyniku</strong> otrzymujesz <strong>3 punkty</strong>.</li>
+            <li>Za trafienie <strong>rozstrzygnięcia meczu</strong> (czyli np. kto wygra lub trafienie, że będzie remis) otrzymujesz <strong>1 punkt</strong>.</li>
+            <li>Złe wytypowanie to <strong>0 punktów</strong>.</li>
+            <li>Swoje typy możesz dodawać i modyfikować w dowolnej chwili, aż do <strong>kolejnej pierwszej minuty meczu</strong>. Po pierwszym gwizdku okienka blokują się automatycznie na zawsze!</li>
+            <li>Typujemy wynik z regulaminowego czasu gry (bez potencjalnych dogrywek i rzutów karnych).</li>
+        </ul>
+        <button onclick="document.getElementById('rules-modal').style.display='none'">Rozumiem, gramy!</button>
+    </div>
+</div>
+
 <div class="container">
+    <button class="info-btn" onclick="document.getElementById('rules-modal').style.display='flex'">i</button>
     <button class="logout-btn" onclick="wyloguj()">Wyloguj / Zmień</button>
     
     <h1 style="margin-top: 0;">🏆 Typer Mundial 2026</h1>

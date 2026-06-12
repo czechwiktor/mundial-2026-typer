@@ -56,6 +56,15 @@
         .logout-btn:hover { background: rgba(255,255,255,0.2); }
 
         h1 { text-align: center; color: #00E5FF; font-weight: 800; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 40px; }
+        
+        /* Zmieniony nagłówek dla Rankingu z powitaniem */
+        .ranking-header {
+            display: flex; justify-content: space-between; align-items: baseline;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; margin-bottom: 20px;
+        }
+        .ranking-header h2 { margin: 0; border: none; padding: 0; }
+        .welcome-msg { color: #00E5FF; font-weight: 800; font-size: 1.2em; text-shadow: 0 0 8px rgba(0,229,255,0.4); }
+
         h2 { text-align: center; color: #FFF; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; }
 
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 30px; }
@@ -152,6 +161,7 @@
             }
 
             h1 { font-size: 1.8em; margin-bottom: 25px; }
+            .ranking-header { flex-direction: column; align-items: center; gap: 5px; }
             h2 { font-size: 1.3em; margin-top: 25px; }
             .login-box { padding: 25px; width: 95%; }
             .login-box select, .login-box input[type="password"], .login-box button { font-size: 1em; padding: 12px; }
@@ -185,7 +195,7 @@
             <option value="p9">Kamil</option>
             <option value="admin">⭐ Administrator</option>
         </select>
-        <input type="password" id="user-password" placeholder="Wpisz hasło od organizatora">
+        <input type="password" id="user-password" placeholder="Podaj hasło">
         <button onclick="zaloguj()">Wejdź do gry</button>
     </div>
 </div>
@@ -195,7 +205,11 @@
     
     <h1 style="margin-top: 0;">🏆 Typer Mundial 2026</h1>
 
-    <h2>Ranking</h2>
+    <div class="ranking-header">
+        <h2 style="margin: 0; border: none; padding: 0;">Ranking</h2>
+        <div class="welcome-msg" id="welcome-msg"></div>
+    </div>
+    
     <div class="table-responsive">
         <table>
             <thead>
@@ -237,8 +251,8 @@ const db = firebase.database();
 
 // ─── HASŁA GRACZY (WPISZ NA TWARDO) ──────────────────────────────────────────
 const haslaGraczy = {
-    "p1": "wioletta123",    // <-- Zmień te hasła przed wysłaniem!
-    "p2": "artur123",
+    "p1": "wioletta123",    // <-- Pamiętaj o reszcie haseł!
+    "p2": "Twistcar1",      // <-- Hasło Artura
     "p3": "bartek123",
     "p4": "wiktor123",
     "p5": "dawid123",
@@ -248,6 +262,19 @@ const haslaGraczy = {
     "p9": "kamil123",
     "admin": "mojetajnehaslo" // <-- Hasło administratora
 };
+
+// ─── GRACZE ──────────────────────────────────────────────────────────────────
+const gracze = [
+    { id:'p1', name:'Wioletta' },
+    { id:'p2', name:'Artur' },
+    { id:'p3', name:'Bartek' },
+    { id:'p4', name:'Wiktor' },
+    { id:'p5', name:'Dawid' },
+    { id:'p6', name:'Adam' },
+    { id:'p7', name:'Jan' },
+    { id:'p8', name:'Marcin' },
+    { id:'p9', name:'Kamil' },
+];
 
 let myPlayerId = localStorage.getItem('typer_user_id');
 
@@ -397,19 +424,6 @@ const harmonogram = [
     { id:104,dom:"🏆 FINAŁ",      wyjazd:"(TBD)", data:"2026-07-19T19:00:00Z", godzPL:"21:00", stage:"Finał", group:null, kolejka:null, venue:"Nowy Jork/New Jersey",         dzien:"Nie, 19 lip" },
 ];
 
-// ─── GRACZE ──────────────────────────────────────────────────────────────────
-const gracze = [
-    { id:'p1', name:'Wioletta' },
-    { id:'p2', name:'Artur' },
-    { id:'p3', name:'Bartek' },
-    { id:'p4', name:'Wiktor' },
-    { id:'p5', name:'Dawid' },
-    { id:'p6', name:'Adam' },
-    { id:'p7', name:'Jan' },
-    { id:'p8', name:'Marcin' },
-    { id:'p9', name:'Kamil' },
-];
-
 // ─── STAN NAWIGACJI ───────────────────────────────────────────────────────────
 const stages = ['Faza grupowa','1/32 finału','1/16 finału','Ćwierćfinały','Półfinały','Finał'];
 let currentStage = 'Faza grupowa';
@@ -433,6 +447,10 @@ const groupColors = {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
+    // Ustawienie powitania w nagłówku
+    let myName = myPlayerId === 'admin' ? 'Administratorze 👑' : gracze.find(g => g.id === myPlayerId)?.name || '';
+    document.getElementById('welcome-msg').innerText = `Witaj, ${myName} 👋`;
+
     renderStageNav();
     renderMatches();
     listenFirebase();
@@ -608,7 +626,6 @@ function obliczPunkty() {
                     }
                 }
                 
-                // Aktualizuj licznik punktów dla tego konkretnego meczu
                 if (ptsEl) {
                     ptsEl.innerText = currentPts + " pkt";
                     ptsEl.className = "match-points " + (currentPts === 3 ? "exact" : (currentPts === 1 ? "partial" : ""));
@@ -635,7 +652,6 @@ function obliczPunkty() {
                     betBInput.style.color = canEdit ? "#1A0B2E" : "#fff";
                 }
 
-                // Gdy mecz się jeszcze nie odbył, licznik punktów pokazuje szare "0 pkt"
                 if (ptsEl) {
                     ptsEl.innerText = "0 pkt";
                     ptsEl.className = "match-points";

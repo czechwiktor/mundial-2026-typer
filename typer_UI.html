@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasz Typer - Mundial 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #1A0B2E, #281154, #482399); 
+            background-attachment: fixed;
+            color: #fff; 
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        /* EKRAN LOGOWANIA */
+        #login-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 5, 20, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000; display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        .login-box {
+            background: rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            text-align: center; max-width: 400px; width: 90%;
+        }
+        .login-box select, .login-box input[type="password"] {
+            width: 100%; padding: 15px; font-size: 1.2em; border-radius: 10px; margin: 10px 0 20px 0;
+            background: rgba(255,255,255,0.9); border: none; font-family: 'Poppins', sans-serif;
+            font-weight: 600; color: #1A0B2E; box-sizing: border-box;
+        }
+        .login-box button {
+            background: #00E5FF; color: #1A0B2E; border: none; padding: 15px 30px; font-size: 1.2em;
+            font-weight: 800; border-radius: 10px; cursor: pointer; width: 100%; transition: 0.3s;
+        }
+        .login-box button:hover { background: #00b3cc; transform: scale(1.05); }
+
+        .container { 
+            position: relative;
+            max-width: 960px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-btn { 
+            position: absolute; top: 30px; right: 30px; 
+            background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
+            padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; 
+            font-family: 'Poppins', sans-serif; font-size: 0.85em; font-weight: 600;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+        h1 { text-align: center; color: #00E5FF; font-weight: 800; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 40px; }
+        h2 { text-align: center; color: #FFF; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; }
+
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 30px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 400px; }
+        th, td { padding: 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        th { background-color: rgba(0, 229, 255, 0.15); color: #00E5FF; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px; }
+        tbody tr { background-color: rgba(255, 255, 255, 0.02); transition: all 0.3s ease; }
+        tbody tr:hover { background-color: rgba(255, 255, 255, 0.1); transform: scale(1.01); }
+        td { font-weight: 600; }
+        
+        /* NAWIGACJA ETAPÓW */
+        .stage-nav {
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+            margin: 30px 0 20px 0;
+        }
+        .stage-btn {
+            background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.15); padding: 8px 16px;
+            border-radius: 20px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-weight: 600; font-size: 0.85em; transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .stage-btn:hover { background: rgba(0,229,255,0.15); color: #00E5FF; border-color: #00E5FF; }
+        .stage-btn.active { background: rgba(0,229,255,0.2); color: #00E5FF; border-color: #00E5FF; box-shadow: 0 0 12px rgba(0,229,255,0.3); }
+
+        /* FILTRY DNI */
+        .day-filter-bar {
+            display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+            margin-bottom: 20px;
+        }
+        .day-btn {
+            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.1); padding: 5px 12px;
+            border-radius: 15px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-weight: 600; font-size: 0.75em; transition: all 0.2s;
+        }
+        .day-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .day-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.4); }
+
+        /* BLOK DNIA */
+        .day-block { margin-bottom: 10px; }
+        .day-label {
+            font-size: 0.8em; font-weight: 600; color: rgba(255,255,255,0.45);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 12px;
+        }
+
+        .match { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px; margin-bottom: 25px; transition: all 0.4s ease; position: relative; }
+        .match:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.5); transform: translateY(-3px); }
+        .match-header { font-size: 1.3em; font-weight: 800; text-align: center; margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .match-meta { text-align: center; font-size: 0.75em; color: rgba(255,255,255,0.45); margin-bottom: 20px; letter-spacing: 0.5px; }
+        
+        .group-tag { display: inline-block; border-radius: 20px; padding: 2px 10px; font-size: 0.7em; font-weight: 800; margin-left: 8px; vertical-align: middle; }
+        .ko-tag { display: inline-block; background: rgba(255,200,0,0.15); color: #FFD600; border: 1px solid rgba(255,200,0,0.3); border-radius: 20px; padding: 2px 10px; font-size: 0.7em; font-weight: 600; margin-left: 8px; vertical-align: middle; }
+        
+        .score-input { width: 45px; padding: 10px; text-align: center; font-size: 1.2em; font-weight: 800; border-radius: 10px; color: #1A0B2E; transition: all 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        .score-input:focus { outline: none; box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
+        .score-input:disabled { color: #aaa !important; cursor: not-allowed; box-shadow: none; border: 1px solid rgba(255,255,255,0.05) !important; }
+        
+        .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; }
+        .player-bet { text-align: center; background: rgba(255, 255, 255, 0.05); padding: 15px 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 0.9em; font-weight: 600; color: #fff; }
+        .player-bet input { margin-top: 10px; width: 35px; padding: 6px; font-size: 1em; }
+
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+
+        .stage-info { text-align: center; color: rgba(255,255,255,0.45); font-size: 0.8em; margin-bottom: 20px; }
+
+        /* WERSJA MOBILNA */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            
+            .logout-btn { 
+                position: static; display: block; margin: 0 auto 20px auto; 
+                padding: 6px 12px; font-size: 0.8em; 
+            }
+
+            h1 { font-size: 1.8em; margin-bottom: 25px; }
+            h2 { font-size: 1.3em; margin-top: 25px; }
+            .login-box { padding: 25px; width: 95%; }
+            .login-box select, .login-box input[type="password"], .login-box button { font-size: 1em; padding: 12px; }
+            th, td { padding: 10px 5px; font-size: 0.85em; }
+            .match { padding: 15px; }
+            .match-header { font-size: 1em; gap: 6px; }
+            .score-input { width: 35px; padding: 8px; font-size: 1em; }
+            .players-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; }
+            .player-bet { padding: 10px 5px; font-size: 0.8em; }
+            .player-bet input { width: 30px; padding: 4px; font-size: 0.9em; }
+            .stage-btn { font-size: 0.78em; padding: 7px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="login-modal">
+    <div class="login-box">
+        <h2 style="margin-top: 0;">Kim jesteś?</h2>
+        <select id="user-selector">
+            <option value="" disabled selected>-- Wybierz gracza --</option>
+            <option value="p1">Wioletta</option>
+            <option value="p2">Artur</option>
+            <option value="p3">Bartek</option>
+            <option value="p4">Wiktor</option>
+            <option value="p5">Dawid</option>
+            <option value="p6">Adam</option>
+            <option value="p7">Jan</option>
+            <option value="p8">Marcin</option>
+            <option value="p9">Kamil</option>
+            <option value="admin">⭐ Administrator</option>
+        </select>
+        <input type="password" id="user-password" placeholder="Wymyśl i zapamiętaj hasło">
+        <button onclick="zaloguj()">Wejdź do gry</button>
+    </div>
+</div>
+
+<div class="container">
+    <button class="logout-btn" onclick="wyloguj()">Wyloguj / Zmień</button>
+    
+    <h1 style="margin-top: 0;">🏆 Typer Mundial 2026</h1>
+
+    <h2>Ranking</h2>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr><th>Miejsce</th><th>Gracz</th><th>Punkty</th></tr>
+            </thead>
+            <tbody id="leaderboard">
+                <tr><td>1</td><td>Wioletta</td><td id="score-p1">0</td></tr>
+                <tr><td>2</td><td>Artur</td><td id="score-p2">0</td></tr>
+                <tr><td>3</td><td>Bartek</td><td id="score-p3">0</td></tr>
+                <tr><td>4</td><td>Wiktor</td><td id="score-p4">0</td></tr>
+                <tr><td>5</td><td>Dawid</td><td id="score-p5">0</td></tr>
+                <tr><td>6</td><td>Adam</td><td id="score-p6">0</td></tr>
+                <tr><td>7</td><td>Jan</td><td id="score-p7">0</td></tr>
+                <tr><td>8</td><td>Marcin</td><td id="score-p8">0</td></tr>
+                <tr><td>9</td><td>Kamil</td><td id="score-p9">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Mecze</h2>
+
+    <div class="stage-nav" id="stage-nav"></div>
+    <div class="stage-info" id="stage-info"></div>
+    <div class="day-filter-bar" id="day-filter-bar"></div>
+
+    <div id="lista-meczow"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+// ─── FIREBASE ───────────────────────────────────────────────────────────────
+const firebaseConfig = {
+    databaseURL: "https://mundial2026-ca6f0-default-rtdb.europe-west1.firebasedatabase.app/"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// ─── LOGOWANIE ───────────────────────────────────────────────────────────────
+const hasloAdmina = "mojetajnehaslo";
+let myPlayerId = localStorage.getItem('typer_user_id');
+
+window.onload = () => {
+    if (!myPlayerId) {
+        document.getElementById('login-modal').style.display = 'flex';
+    } else {
+        init();
+    }
+};
+
+function zaloguj() {
+    let sel = document.getElementById('user-selector').value;
+    let pass = document.getElementById('user-password').value;
+    if (!sel || pass === "") { alert("Wybierz gracza i wpisz hasło!"); return; }
+    if (sel === 'admin') {
+        if (pass === hasloAdmina) { loginSuccess(sel); }
+        else { alert("Błędne hasło administratora!"); }
+        return;
+    }
+    db.ref('mundial-hasla/' + sel).once('value').then((snapshot) => {
+        let zapisaneHaslo = snapshot.val();
+        if (zapisaneHaslo === null) {
+            db.ref('mundial-hasla/' + sel).set(pass);
+            alert("Konto zostało pomyślnie zarezerwowane Twoim hasłem!");
+            loginSuccess(sel);
+        } else if (zapisaneHaslo === pass) {
+            loginSuccess(sel);
+        } else {
+            alert("To konto jest już zajęte, a podane hasło jest nieprawidłowe!");
+        }
+    });
+}
+
+function loginSuccess(sel) {
+    localStorage.setItem('typer_user_id', sel);
+    myPlayerId = sel;
+    document.getElementById('login-modal').style.display = 'none';
+    init();
+}
+
+function wyloguj() {
+    localStorage.removeItem('typer_user_id');
+    location.reload();
+}
+
+// ─── PEŁNY HARMONOGRAM ───────────────────────────────────────────────────────
+const harmonogram = [
+    { id:1,  dom:"Meksyk",       wyjazd:"RPA",                  data:"2026-06-11T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"A", kolejka:1, venue:"Mexico City",            dzien:"Czw, 11 cze" },
+    { id:2,  dom:"Korea Płd.",   wyjazd:"Czechy",               data:"2026-06-12T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"A", kolejka:1, venue:"Guadalajara",            dzien:"Pt, 12 cze" },
+    { id:3,  dom:"Kanada",       wyjazd:"Bośnia i Herce.",      data:"2026-06-12T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"B", kolejka:1, venue:"Toronto",                  dzien:"Pt, 12 cze" },
+    { id:4,  dom:"USA",          wyjazd:"Paragwaj",             data:"2026-06-13T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"D", kolejka:1, venue:"Los Angeles",              dzien:"Sob, 13 cze" },
+    { id:5,  dom:"Katar",        wyjazd:"Szwajcaria",           data:"2026-06-13T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"B", kolejka:1, venue:"San Francisco",            dzien:"Sob, 13 cze" },
+    { id:6,  dom:"Brazylia",     wyjazd:"Maroko",               data:"2026-06-13T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"C", kolejka:1, venue:"Nowy Jork/New Jersey",     dzien:"Nie, 14 cze" },
+    { id:7,  dom:"Haiti",        wyjazd:"Szkocja",              data:"2026-06-14T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"C", kolejka:1, venue:"Boston",                   dzien:"Nie, 14 cze" },
+    { id:8,  dom:"Australia",    wyjazd:"Turcja",               data:"2026-06-14T04:00:00Z", godzPL:"06:00", stage:"Faza grupowa", group:"D", kolejka:1, venue:"Vancouver",                dzien:"Nie, 14 cze" },
+    { id:9,  dom:"Niemcy",       wyjazd:"Curaçao",              data:"2026-06-14T17:00:00Z", godzPL:"19:00", stage:"Faza grupowa", group:"E", kolejka:1, venue:"Houston",                  dzien:"Nie, 14 cze" },
+    { id:10, dom:"Holandia",     wyjazd:"Japonia",              data:"2026-06-14T20:00:00Z", godzPL:"22:00", stage:"Faza grupowa", group:"F", kolejka:1, venue:"Dallas",                   dzien:"Nie, 14 cze" },
+    { id:11, dom:"Wybrzeże Koś.",wyjazd:"Ekwador",              data:"2026-06-14T23:00:00Z", godzPL:"01:00", stage:"Faza grupowa", group:"E", kolejka:1, venue:"Philadelphia",             dzien:"Pon, 15 cze" },
+    { id:12, dom:"Szwecja",      wyjazd:"Tunezja",              data:"2026-06-15T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"F", kolejka:1, venue:"Monterrey",                dzien:"Pon, 15 cze" },
+    { id:13, dom:"Hiszpania",    wyjazd:"Wyspy Zielonego Przyl.",data:"2026-06-15T16:00:00Z", godzPL:"18:00", stage:"Faza grupowa", group:"H", kolejka:1, venue:"Atlanta",                dzien:"Pon, 15 cze" },
+    { id:14, dom:"Belgia",       wyjazd:"Egipt",                data:"2026-06-15T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"G", kolejka:1, venue:"Vancouver",                dzien:"Pon, 15 cze" },
+    { id:15, dom:"Arabia Saud.", wyjazd:"Urugwaj",              data:"2026-06-15T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"H", kolejka:1, venue:"Miami",                    dzien:"Wt, 16 cze" },
+    { id:16, dom:"Iran",         wyjazd:"Nowa Zelandia",        data:"2026-06-16T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"G", kolejka:1, venue:"Los Angeles",              dzien:"Wt, 16 cze" },
+    { id:17, dom:"Francja",      wyjazd:"Senegal",              data:"2026-06-16T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"I", kolejka:1, venue:"Nowy Jork/New Jersey",     dzien:"Wt, 16 cze" },
+    { id:18, dom:"Irak",         wyjazd:"Norwegia",             data:"2026-06-16T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"I", kolejka:1, venue:"Boston",                   dzien:"Śr, 17 cze" },
+    { id:19, dom:"Argentyna",    wyjazd:"Algieria",             data:"2026-06-17T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"J", kolejka:1, venue:"Kansas City",              dzien:"Śr, 17 cze" },
+    { id:20, dom:"Austria",      wyjazd:"Jordania",             data:"2026-06-17T04:00:00Z", godzPL:"06:00", stage:"Faza grupowa", group:"J", kolejka:1, venue:"San Francisco",            dzien:"Śr, 17 cze" },
+    { id:21, dom:"Portugalia",   wyjazd:"DR Kongo",             data:"2026-06-17T17:00:00Z", godzPL:"19:00", stage:"Faza grupowa", group:"K", kolejka:1, venue:"Houston",                  dzien:"Śr, 17 cze" },
+    { id:22, dom:"Anglia",       wyjazd:"Chorwacja",            data:"2026-06-17T20:00:00Z", godzPL:"22:00", stage:"Faza grupowa", group:"L", kolejka:1, venue:"Dallas",                   dzien:"Śr, 17 cze" },
+    { id:23, dom:"Ghana",        wyjazd:"Panama",               data:"2026-06-17T23:00:00Z", godzPL:"01:00", stage:"Faza grupowa", group:"L", kolejka:1, venue:"Toronto",                  dzien:"Czw, 18 cze" },
+    { id:24, dom:"Uzbekistan",   wyjazd:"Kolumbia",             data:"2026-06-18T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"K", kolejka:1, venue:"Mexico City",              dzien:"Czw, 18 cze" },
+    { id:25, dom:"Czechy",       wyjazd:"RPA",                  data:"2026-06-18T16:00:00Z", godzPL:"18:00", stage:"Faza grupowa", group:"A", kolejka:2, venue:"Atlanta",                  dzien:"Czw, 18 cze" },
+    { id:26, dom:"Szwajcaria",   wyjazd:"Bośnia i Herce.",      data:"2026-06-18T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"B", kolejka:2, venue:"Los Angeles",              dzien:"Czw, 18 cze" },
+    { id:27, dom:"Kanada",       wyjazd:"Katar",                data:"2026-06-18T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"B", kolejka:2, venue:"Vancouver",                dzien:"Pt, 19 cze" },
+    { id:28, dom:"Meksyk",       wyjazd:"Korea Płd.",           data:"2026-06-19T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"A", kolejka:2, venue:"Guadalajara",              dzien:"Pt, 19 cze" },
+    { id:29, dom:"USA",          wyjazd:"Australia",            data:"2026-06-19T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"D", kolejka:2, venue:"Seattle",                  dzien:"Pt, 19 cze" },
+    { id:30, dom:"Szkocja",      wyjazd:"Maroko",               data:"2026-06-19T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"C", kolejka:2, venue:"Boston",                   dzien:"Sob, 20 cze" },
+    { id:31, dom:"Brazylia",     wyjazd:"Haiti",                data:"2026-06-20T00:30:00Z", godzPL:"02:30", stage:"Faza grupowa", group:"C", kolejka:2, venue:"Philadelphia",             dzien:"Sob, 20 cze" },
+    { id:32, dom:"Turcja",       wyjazd:"Paragwaj",             data:"2026-06-20T03:00:00Z", godzPL:"05:00", stage:"Faza grupowa", group:"D", kolejka:2, venue:"San Francisco",            dzien:"Sob, 20 cze" },
+    { id:33, dom:"Holandia",     wyjazd:"Szwecja",              data:"2026-06-20T17:00:00Z", godzPL:"19:00", stage:"Faza grupowa", group:"F", kolejka:2, venue:"Houston",                  dzien:"Sob, 20 cze" },
+    { id:34, dom:"Niemcy",       wyjazd:"Wybrzeże Koś.",        data:"2026-06-20T20:00:00Z", godzPL:"22:00", stage:"Faza grupowa", group:"E", kolejka:2, venue:"Toronto",                  dzien:"Sob, 20 cze" },
+    { id:35, dom:"Ekwador",      wyjazd:"Curaçao",              data:"2026-06-21T03:00:00Z", godzPL:"05:00", stage:"Faza grupowa", group:"E", kolejka:2, venue:"Kansas City",              dzien:"Nie, 21 cze" },
+    { id:36, dom:"Tunezja",      wyjazd:"Japonia",              data:"2026-06-21T04:00:00Z", godzPL:"06:00", stage:"Faza grupowa", group:"F", kolejka:2, venue:"Monterrey",                dzien:"Nie, 21 cze" },
+    { id:37, dom:"Hiszpania",    wyjazd:"Arabia Saud.",         data:"2026-06-21T16:00:00Z", godzPL:"18:00", stage:"Faza grupowa", group:"H", kolejka:2, venue:"Atlanta",                  dzien:"Nie, 21 cze" },
+    { id:38, dom:"Belgia",       wyjazd:"Iran",                 data:"2026-06-21T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"G", kolejka:2, venue:"Los Angeles",              dzien:"Nie, 21 cze" },
+    { id:39, dom:"Urugwaj",      wyjazd:"Wyspy Zielonego Przyl.",data:"2026-06-21T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"H", kolejka:2, venue:"Miami",                   dzien:"Pon, 22 cze" },
+    { id:40, dom:"Nowa Zelandia",wyjazd:"Egipt",                data:"2026-06-22T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"G", kolejka:2, venue:"Vancouver",                dzien:"Pon, 22 cze" },
+    { id:41, dom:"Argentyna",    wyjazd:"Austria",              data:"2026-06-22T17:00:00Z", godzPL:"19:00", stage:"Faza grupowa", group:"J", kolejka:2, venue:"Dallas",                   dzien:"Pon, 22 cze" },
+    { id:42, dom:"Francja",      wyjazd:"Irak",                 data:"2026-06-22T21:00:00Z", godzPL:"23:00", stage:"Faza grupowa", group:"I", kolejka:2, venue:"Philadelphia",             dzien:"Pon, 22 cze" },
+    { id:43, dom:"Norwegia",     wyjazd:"Senegal",              data:"2026-06-23T00:00:00Z", godzPL:"02:00", stage:"Faza grupowa", group:"I", kolejka:2, venue:"Nowy Jork/New Jersey",     dzien:"Wt, 23 cze" },
+    { id:44, dom:"Jordania",     wyjazd:"Algieria",             data:"2026-06-23T03:00:00Z", godzPL:"05:00", stage:"Faza grupowa", group:"J", kolejka:2, venue:"San Francisco",            dzien:"Wt, 23 cze" },
+    { id:45, dom:"Portugalia",   wyjazd:"Uzbekistan",           data:"2026-06-23T17:00:00Z", godzPL:"19:00", stage:"Faza grupowa", group:"K", kolejka:2, venue:"Houston",                  dzien:"Wt, 23 cze" },
+    { id:46, dom:"Anglia",       wyjazd:"Ghana",                data:"2026-06-23T20:00:00Z", godzPL:"22:00", stage:"Faza grupowa", group:"L", kolejka:2, venue:"Boston",                   dzien:"Wt, 23 cze" },
+    { id:47, dom:"Panama",       wyjazd:"Chorwacja",            data:"2026-06-23T23:00:00Z", godzPL:"01:00", stage:"Faza grupowa", group:"L", kolejka:2, venue:"Toronto",                  dzien:"Śr, 24 cze" },
+    { id:48, dom:"Kolumbia",     wyjazd:"DR Kongo",             data:"2026-06-24T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"K", kolejka:2, venue:"Guadalajara",              dzien:"Śr, 24 cze" },
+    { id:49, dom:"Szwajcaria",   wyjazd:"Kanada",               data:"2026-06-24T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"B", kolejka:3, venue:"Vancouver",                dzien:"Śr, 24 cze" },
+    { id:50, dom:"Bośnia i Herce.",wyjazd:"Katar",              data:"2026-06-24T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"B", kolejka:3, venue:"Seattle",                  dzien:"Śr, 24 cze" },
+    { id:51, dom:"Szkocja",      wyjazd:"Brazylia",             data:"2026-06-24T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"C", kolejka:3, venue:"Miami",                    dzien:"Czw, 25 cze" },
+    { id:52, dom:"Maroko",       wyjazd:"Haiti",                data:"2026-06-24T22:00:00Z", godzPL:"00:00", stage:"Faza grupowa", group:"C", kolejka:3, venue:"Atlanta",                  dzien:"Czw, 25 cze" },
+    { id:53, dom:"Czechy",       wyjazd:"Meksyk",               data:"2026-06-25T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"A", kolejka:3, venue:"Mexico City",              dzien:"Czw, 25 cze" },
+    { id:54, dom:"RPA",          wyjazd:"Korea Płd.",           data:"2026-06-25T01:00:00Z", godzPL:"03:00", stage:"Faza grupowa", group:"A", kolejka:3, venue:"Monterrey",                dzien:"Czw, 25 cze" },
+    { id:55, dom:"Ekwador",      wyjazd:"Niemcy",               data:"2026-06-25T20:00:00Z", godzPL:"22:00", stage:"Faza grupowa", group:"E", kolejka:3, venue:"Nowy Jork/New Jersey",     dzien:"Czw, 25 cze" },
+    { id:56, dom:"Curaçao",      wyjazd:"Wybrzeże Koś.",        data:"2026-06-25T20:00:00Z", godzPL:"22:00", stage:"Faza grupowa", group:"E", kolejka:3, venue:"Philadelphia",             dzien:"Czw, 25 cze" },
+    { id:57, dom:"Japonia",      wyjazd:"Szwecja",              data:"2026-06-25T23:00:00Z", godzPL:"01:00", stage:"Faza grupowa", group:"F", kolejka:3, venue:"Dallas",                   dzien:"Pt, 26 cze" },
+    { id:58, dom:"Tunezja",      wyjazd:"Holandia",             data:"2026-06-25T23:00:00Z", godzPL:"01:00", stage:"Faza grupowa", group:"F", kolejka:3, venue:"Kansas City",              dzien:"Pt, 26 cze" },
+    { id:59, dom:"Turcja",       wyjazd:"USA",                  data:"2026-06-26T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"D", kolejka:3, venue:"Los Angeles",              dzien:"Pt, 26 cze" },
+    { id:60, dom:"Paragwaj",     wyjazd:"Australia",            data:"2026-06-26T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"D", kolejka:3, venue:"San Francisco",            dzien:"Pt, 26 cze" },
+    { id:61, dom:"Norwegia",     wyjazd:"Francja",              data:"2026-06-26T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"I", kolejka:3, venue:"Boston",                   dzien:"Pt, 26 cze" },
+    { id:62, dom:"Senegal",      wyjazd:"Irak",                 data:"2026-06-26T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"I", kolejka:3, venue:"Toronto",                  dzien:"Pt, 26 cze" },
+    { id:63, dom:"Wyspy Zielonego Przyl.",wyjazd:"Arabia Saud.",data:"2026-06-27T00:00:00Z", godzPL:"02:00", stage:"Faza grupowa", group:"H", kolejka:3, venue:"Houston",                  dzien:"Sob, 27 cze" },
+    { id:64, dom:"Urugwaj",      wyjazd:"Hiszpania",            data:"2026-06-27T00:00:00Z", godzPL:"02:00", stage:"Faza grupowa", group:"H", kolejka:3, venue:"Guadalajara",              dzien:"Sob, 27 cze" },
+    { id:65, dom:"Egipt",        wyjazd:"Iran",                 data:"2026-06-27T03:00:00Z", godzPL:"05:00", stage:"Faza grupowa", group:"G", kolejka:3, venue:"Seattle",                  dzien:"Sob, 27 cze" },
+    { id:66, dom:"Nowa Zelandia",wyjazd:"Belgia",               data:"2026-06-27T03:00:00Z", godzPL:"05:00", stage:"Faza grupowa", group:"G", kolejka:3, venue:"Vancouver",                dzien:"Sob, 27 cze" },
+    { id:67, dom:"Panama",       wyjazd:"Anglia",               data:"2026-06-27T21:00:00Z", godzPL:"23:00", stage:"Faza grupowa", group:"L", kolejka:3, venue:"Nowy Jork/New Jersey",     dzien:"Sob, 27 cze" },
+    { id:68, dom:"Chorwacja",    wyjazd:"Ghana",                data:"2026-06-27T21:00:00Z", godzPL:"23:00", stage:"Faza grupowa", group:"L", kolejka:3, venue:"Philadelphia",             dzien:"Sob, 27 cze" },
+    { id:69, dom:"Kolumbia",     wyjazd:"Portugalia",           data:"2026-06-27T23:30:00Z", godzPL:"01:30", stage:"Faza grupowa", group:"K", kolejka:3, venue:"Miami",                    dzien:"Nie, 28 cze" },
+    { id:70, dom:"DR Kongo",     wyjazd:"Uzbekistan",           data:"2026-06-27T23:30:00Z", godzPL:"01:30", stage:"Faza grupowa", group:"K", kolejka:3, venue:"Atlanta",                  dzien:"Nie, 28 cze" },
+    { id:71, dom:"Algieria",     wyjazd:"Austria",              data:"2026-06-28T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"J", kolejka:3, venue:"Kansas City",              dzien:"Nie, 28 cze" },
+    { id:72, dom:"Jordania",     wyjazd:"Argentyna",            data:"2026-06-28T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"J", kolejka:3, venue:"Dallas",                   dzien:"Nie, 28 cze" },
+
+    { id:73, dom:"1/32 Mecz 1",  wyjazd:"(TBD)", data:"2026-06-28T19:00:00Z", godzPL:"21:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Los Angeles",            dzien:"Nie, 28 cze" },
+    { id:74, dom:"1/32 Mecz 2",  wyjazd:"(TBD)", data:"2026-06-29T19:00:00Z", godzPL:"21:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Houston",                dzien:"Pon, 29 cze" },
+    { id:75, dom:"1/32 Mecz 3",  wyjazd:"(TBD)", data:"2026-06-29T20:30:00Z", godzPL:"22:30", stage:"1/32 finału", group:null, kolejka:null, venue:"Boston",                  dzien:"Pon, 29 cze" },
+    { id:76, dom:"1/32 Mecz 4",  wyjazd:"(TBD)", data:"2026-06-30T01:00:00Z", godzPL:"03:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Monterrey",                dzien:"Wt, 30 cze" },
+    { id:77, dom:"1/32 Mecz 5",  wyjazd:"(TBD)", data:"2026-06-30T17:00:00Z", godzPL:"19:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Dallas",                  dzien:"Wt, 30 cze" },
+    { id:78, dom:"1/32 Mecz 6",  wyjazd:"(TBD)", data:"2026-06-30T21:00:00Z", godzPL:"23:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Nowy Jork/New Jersey",    dzien:"Wt, 30 cze" },
+    { id:79, dom:"1/32 Mecz 7",  wyjazd:"(TBD)", data:"2026-07-01T01:00:00Z", godzPL:"03:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Mexico City",              dzien:"Śr, 1 lip" },
+    { id:80, dom:"1/32 Mecz 8",  wyjazd:"(TBD)", data:"2026-07-01T16:00:00Z", godzPL:"18:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Atlanta",                  dzien:"Śr, 1 lip" },
+    { id:81, dom:"1/32 Mecz 9",  wyjazd:"(TBD)", data:"2026-07-01T20:00:00Z", godzPL:"22:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Seattle",                  dzien:"Śr, 1 lip" },
+    { id:82, dom:"1/32 Mecz 10", wyjazd:"(TBD)", data:"2026-07-01T20:00:00Z", godzPL:"22:00", stage:"1/32 finału", group:null, kolejka:null, venue:"San Francisco",            dzien:"Śr, 1 lip" },
+    { id:83, dom:"1/32 Mecz 11", wyjazd:"(TBD)", data:"2026-07-02T19:00:00Z", godzPL:"21:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Los Angeles",              dzien:"Czw, 2 lip" },
+    { id:84, dom:"1/32 Mecz 12", wyjazd:"(TBD)", data:"2026-07-02T23:00:00Z", godzPL:"01:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Toronto",                  dzien:"Pt, 3 lip" },
+    { id:85, dom:"1/32 Mecz 13", wyjazd:"(TBD)", data:"2026-07-03T03:00:00Z", godzPL:"05:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Vancouver",                dzien:"Pt, 3 lip" },
+    { id:86, dom:"1/32 Mecz 14", wyjazd:"(TBD)", data:"2026-07-03T18:00:00Z", godzPL:"20:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Dallas",                   dzien:"Pt, 3 lip" },
+    { id:87, dom:"1/32 Mecz 15", wyjazd:"(TBD)", data:"2026-07-03T22:00:00Z", godzPL:"00:00", stage:"1/32 finału", group:null, kolejka:null, venue:"Miami",                    dzien:"Sob, 4 lip" },
+    { id:88, dom:"1/32 Mecz 16", wyjazd:"(TBD)", data:"2026-07-04T01:30:00Z", godzPL:"03:30", stage:"1/32 finału", group:null, kolejka:null, venue:"Kansas City",              dzien:"Sob, 4 lip" },
+
+    { id:89, dom:"1/16 Mecz 1",  wyjazd:"(TBD)", data:"2026-07-04T17:00:00Z", godzPL:"19:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Houston",                  dzien:"Sob, 4 lip" },
+    { id:90, dom:"1/16 Mecz 2",  wyjazd:"(TBD)", data:"2026-07-04T21:00:00Z", godzPL:"23:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Philadelphia",             dzien:"Sob, 4 lip" },
+    { id:91, dom:"1/16 Mecz 3",  wyjazd:"(TBD)", data:"2026-07-05T20:00:00Z", godzPL:"22:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Nowy Jork/New Jersey",    dzien:"Nie, 5 lip" },
+    { id:92, dom:"1/16 Mecz 4",  wyjazd:"(TBD)", data:"2026-07-06T00:00:00Z", godzPL:"02:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Mexico City",              dzien:"Pon, 6 lip" },
+    { id:93, dom:"1/16 Mecz 5",  wyjazd:"(TBD)", data:"2026-07-06T19:00:00Z", godzPL:"21:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Dallas",                  dzien:"Pon, 6 lip" },
+    { id:94, dom:"1/16 Mecz 6",  wyjazd:"(TBD)", data:"2026-07-07T00:00:00Z", godzPL:"02:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Seattle",                  dzien:"Wt, 7 lip" },
+    { id:95, dom:"1/16 Mecz 7",  wyjazd:"(TBD)", data:"2026-07-07T16:00:00Z", godzPL:"18:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Atlanta",                  dzien:"Wt, 7 lip" },
+    { id:96, dom:"1/16 Mecz 8",  wyjazd:"(TBD)", data:"2026-07-07T20:00:00Z", godzPL:"22:00", stage:"1/16 finału", group:null, kolejka:null, venue:"Vancouver",                dzien:"Wt, 7 lip" },
+
+    { id:97, dom:"Ćwierćfinał 1",wyjazd:"(TBD)", data:"2026-07-09T20:00:00Z", godzPL:"22:00", stage:"Ćwierćfinały", group:null, kolejka:null, venue:"Boston",                  dzien:"Czw, 9 lip" },
+    { id:98, dom:"Ćwierćfinał 2",wyjazd:"(TBD)", data:"2026-07-10T19:00:00Z", godzPL:"21:00", stage:"Ćwierćfinały", group:null, kolejka:null, venue:"Los Angeles",             dzien:"Pt, 10 lip" },
+    { id:99, dom:"Ćwierćfinał 3",wyjazd:"(TBD)", data:"2026-07-11T20:00:00Z", godzPL:"22:00", stage:"Ćwierćfinały", group:null, kolejka:null, venue:"Miami",                   dzien:"Sob, 11 lip" },
+    { id:100,dom:"Ćwierćfinał 4",wyjazd:"(TBD)", data:"2026-07-12T01:00:00Z", godzPL:"03:00", stage:"Ćwierćfinały", group:null, kolejka:null, venue:"Kansas City",             dzien:"Nie, 12 lip" },
+
+    { id:101,dom:"Półfinał 1",   wyjazd:"(TBD)", data:"2026-07-14T19:00:00Z", godzPL:"21:00", stage:"Półfinały",    group:null, kolejka:null, venue:"Dallas",                  dzien:"Wt, 14 lip" },
+    { id:102,dom:"Półfinał 2",   wyjazd:"(TBD)", data:"2026-07-15T19:00:00Z", godzPL:"21:00", stage:"Półfinały",    group:null, kolejka:null, venue:"Atlanta",                 dzien:"Śr, 15 lip" },
+
+    { id:103,dom:"Mecz o 3. miejsce",wyjazd:"(TBD)", data:"2026-07-18T21:00:00Z", godzPL:"23:00", stage:"Finał", group:null, kolejka:null, venue:"Miami",                      dzien:"Sob, 18 lip" },
+    { id:104,dom:"🏆 FINAŁ",      wyjazd:"(TBD)", data:"2026-07-19T19:00:00Z", godzPL:"21:00", stage:"Finał", group:null, kolejka:null, venue:"Nowy Jork/New Jersey",         dzien:"Nie, 19 lip" },
+];
+
+// ─── GRACZE ──────────────────────────────────────────────────────────────────
+const gracze = [
+    { id:'p1', name:'Wioletta' },
+    { id:'p2', name:'Artur' },
+    { id:'p3', name:'Bartek' },
+    { id:'p4', name:'Wiktor' },
+    { id:'p5', name:'Dawid' },
+    { id:'p6', name:'Adam' },
+    { id:'p7', name:'Jan' },
+    { id:'p8', name:'Marcin' },
+    { id:'p9', name:'Kamil' },
+];
+
+// ─── STAN NAWIGACJI ───────────────────────────────────────────────────────────
+const stages = ['Faza grupowa','1/32 finału','1/16 finału','Ćwierćfinały','Półfinały','Finał'];
+let currentStage = 'Faza grupowa';
+let currentDay = null; 
+
+// ─── KOLORY GRUP ──────────────────────────────────────────────────────────────
+const groupColors = {
+    "A": { text: "#E0E0E0", bg: "rgba(224, 224, 224, 0.15)", border: "rgba(224, 224, 224, 0.3)" },
+    "B": { text: "#448AFF", bg: "rgba(68, 138, 255, 0.15)", border: "rgba(68, 138, 255, 0.3)" },
+    "C": { text: "#69F0AE", bg: "rgba(105, 240, 174, 0.15)", border: "rgba(105, 240, 174, 0.3)" },
+    "D": { text: "#FFAB40", bg: "rgba(255, 171, 64, 0.15)", border: "rgba(255, 171, 64, 0.3)" },
+    "E": { text: "#E040FB", bg: "rgba(224, 64, 251, 0.15)", border: "rgba(224, 64, 251, 0.3)" },
+    "F": { text: "#18FFFF", bg: "rgba(24, 255, 255, 0.15)", border: "rgba(24, 255, 255, 0.3)" },
+    "G": { text: "#B2FF59", bg: "rgba(178, 255, 89, 0.15)", border: "rgba(178, 255, 89, 0.3)" },
+    "H": { text: "#FF4081", bg: "rgba(255, 64, 129, 0.15)", border: "rgba(255, 64, 129, 0.3)" },
+    "I": { text: "#FFEB3B", bg: "rgba(255, 235, 59, 0.15)", border: "rgba(255, 235, 59, 0.3)" },
+    "J": { text: "#00BCD4", bg: "rgba(0, 188, 212, 0.15)", border: "rgba(0, 188, 212, 0.3)" },
+    "K": { text: "#CDDC39", bg: "rgba(205, 220, 57, 0.15)", border: "rgba(205, 220, 57, 0.3)" },
+    "L": { text: "#9C27B0", bg: "rgba(156, 39, 176, 0.15)", border: "rgba(156, 39, 176, 0.3)" }
+};
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function init() {
+    renderStageNav();
+    renderMatches();
+    listenFirebase();
+}
+
+function renderStageNav() {
+    const nav = document.getElementById('stage-nav');
+    nav.innerHTML = stages.map(s =>
+        `<button class="stage-btn${s===currentStage?' active':''}" onclick="setStage('${s}')">${s}</button>`
+    ).join('');
+}
+
+function setStage(s) {
+    currentStage = s;
+    currentDay = null;
+    renderStageNav();
+    renderDayFilter();
+    renderMatches();
+}
+
+function renderDayFilter() {
+    const bar = document.getElementById('day-filter-bar');
+    const stageMecze = harmonogram.filter(m => m.stage === currentStage);
+    const days = [...new Set(stageMecze.map(m => m.dzien))];
+    if (days.length <= 1) { bar.innerHTML = ''; return; }
+    bar.innerHTML = `<button class="day-btn${currentDay===null?' active':''}" onclick="setDay(null)">Wszystkie</button>` +
+        days.map(d => `<button class="day-btn${currentDay===d?' active':''}" onclick="setDay('${d}')">${d}</button>`).join('');
+}
+
+function setDay(d) {
+    currentDay = d;
+    renderDayFilter();
+    renderMatches();
+}
+
+// ─── GENEROWANIE MECZÓW ───────────────────────────────────────────────────────
+function renderMatches() {
+    const stageMecze = harmonogram.filter(m => m.stage === currentStage);
+    const filteredMecze = currentDay ? stageMecze.filter(m => m.dzien === currentDay) : stageMecze;
+
+    const infoMap = {
+        'Faza grupowa':  '48 drużyn · 12 grup · 11–27 czerwca',
+        '1/32 finału':   '32 drużyny · 28 czerwca – 3 lipca',
+        '1/16 finału':   '16 drużyn · 4–7 lipca',
+        'Ćwierćfinały':  '8 drużyn · 9–11 lipca',
+        'Półfinały':     '4 drużyny · 14–15 lipca',
+        'Finał':         'Mecz o 3. miejsce (18 lip) + Finał (19 lip) · Nowy Jork / New Jersey',
+    };
+    document.getElementById('stage-info').textContent = infoMap[currentStage] || '';
+
+    renderDayFilter();
+
+    const byDay = {};
+    filteredMecze.forEach(m => {
+        if (!byDay[m.dzien]) byDay[m.dzien] = [];
+        byDay[m.dzien].push(m);
+    });
+
+    let html = '';
+    for (const [dzien, mecze] of Object.entries(byDay)) {
+        html += `<div class="day-block"><div class="day-label">${dzien}</div>`;
+        mecze.forEach(mecz => {
+            
+            const gc = groupColors[mecz.group] || { text: "#00E5FF", bg: "rgba(0,229,255,0.15)", border: "rgba(0,229,255,0.3)" };
+            const tagHTML = mecz.group
+                ? `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`
+                : `<span class="ko-tag">${mecz.stage}</span>`;
+
+            const playerBets = gracze.map(g => `
+                <div class="player-bet">${g.name}<br>
+                    <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff;">:<input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff;">
+                </div>`).join('');
+
+            html += `
+            <div class="match" data-match="${mecz.id}" id="match-div-${mecz.id}">
+                <div class="match-header">
+                    <span style="color: #82B1FF; text-shadow: 0 0 8px rgba(130, 177, 255, 0.4);">${mecz.dom}</span>
+                    <input type="number" class="score-input real-score" id="real-${mecz.id}-a" placeholder="-" style="background: rgba(130, 177, 255, 0.9); border: 2px solid rgba(130, 177, 255, 0.4); color: #1A0B2E;">
+                    <span style="color: #fff; margin: 0 5px;">:</span>
+                    <input type="number" class="score-input real-score" id="real-${mecz.id}-b" placeholder="-" style="background: rgba(255, 138, 128, 0.9); border: 2px solid rgba(255, 138, 128, 0.4); color: #1A0B2E;">
+                    <span style="color: #FF8A80; text-shadow: 0 0 8px rgba(255, 138, 128, 0.4);">${mecz.wyjazd}</span>
+                    ${tagHTML}
+                </div>
+                <div class="match-meta">${mecz.dzien} · godz. ${mecz.godzPL} &nbsp;·&nbsp; ${mecz.venue}</div>
+                <div class="players-grid">${playerBets}</div>
+            </div>`;
+        });
+        html += '</div>';
+    }
+
+    if (!html) html = '<p style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;">Brak meczów w tym widoku.</p>';
+    document.getElementById('lista-meczow').innerHTML = html;
+
+    document.querySelectorAll('.score-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+            db.ref('mundial-typer/' + e.target.id).set(e.target.value);
+        });
+    });
+
+    syncFromFirebaseSnapshot();
+    obliczPunkty();
+}
+
+// ─── FIREBASE SYNC ────────────────────────────────────────────────────────────
+let latestSnapshot = {};
+
+function listenFirebase() {
+    db.ref('mundial-typer').on('value', (snapshot) => {
+        latestSnapshot = snapshot.val() || {};
+        syncFromFirebaseSnapshot();
+        obliczPunkty();
+    });
+}
+
+function syncFromFirebaseSnapshot() {
+    document.querySelectorAll('.score-input').forEach(input => {
+        if (latestSnapshot[input.id] !== undefined) {
+            input.value = latestSnapshot[input.id];
+        }
+    });
+}
+
+// ─── LICZENIE PUNKTÓW I UPRAWNIENIA ──────────────────────────────────────────
+function obliczPunkty() {
+    let punkty = gracze.map(() => 0);
+    let isAdmin = (myPlayerId === 'admin');
+
+    harmonogram.forEach(mecz => {
+        let realAInput = document.getElementById('real-'+mecz.id+'-a');
+        let realBInput = document.getElementById('real-'+mecz.id+'-b');
+
+        let realA = realAInput ? realAInput.value : (latestSnapshot['real-'+mecz.id+'-a'] || '');
+        let realB = realBInput ? realBInput.value : (latestSnapshot['real-'+mecz.id+'-b'] || '');
+
+        if (realAInput) {
+            realAInput.disabled = !isAdmin;
+            realAInput.style.backgroundColor = isAdmin ? "rgba(130, 177, 255, 0.9)" : "rgba(130, 177, 255, 0.15)";
+        }
+        if (realBInput) {
+            realBInput.disabled = !isAdmin;
+            realBInput.style.backgroundColor = isAdmin ? "rgba(255, 138, 128, 0.9)" : "rgba(255, 138, 128, 0.15)";
+        }
+
+        const matchDiv = document.getElementById('match-div-'+mecz.id);
+        if (matchDiv) matchDiv.style.backgroundColor = (realA !== '' && realB !== '') ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.2)";
+
+        gracze.forEach((g, idx) => {
+            let betAInput = document.getElementById('bet-'+mecz.id+'-'+g.id+'-a');
+            let betBInput = document.getElementById('bet-'+mecz.id+'-'+g.id+'-b');
+
+            let betA = betAInput ? betAInput.value : (latestSnapshot['bet-'+mecz.id+'-'+g.id+'-a'] || '');
+            let betB = betBInput ? betBInput.value : (latestSnapshot['bet-'+mecz.id+'-'+g.id+'-b'] || '');
+
+            if (realA !== '' && realB !== '') {
+                if (betAInput) { betAInput.disabled = true; betAInput.style.backgroundColor = "rgba(130, 177, 255, 0.15)"; betAInput.style.color = "#fff"; }
+                if (betBInput) { betBInput.disabled = true; betBInput.style.backgroundColor = "rgba(255, 138, 128, 0.15)"; betBInput.style.color = "#fff"; }
+
+                if (betA !== '' && betB !== '') {
+                    let ra = parseInt(realA), rb = parseInt(realB);
+                    let ba = parseInt(betA), bb = parseInt(betB);
+                    let realZnak = Math.sign(ra - rb);
+                    if (ra === ba && rb === bb) { punkty[idx] += 3; }
+                    else if (Math.sign(ba - bb) === realZnak) { punkty[idx] += 1; }
+                }
+            } else {
+                let isMe = g.id === myPlayerId;
+                let canEdit = isMe || isAdmin;
+
+                const teraz = new Date();
+                const czasRozpoczecia = new Date(mecz.data);
+                let isTimeLocked = isMe && !isAdmin && (teraz >= czasRozpoczecia);
+                
+                if (isTimeLocked) canEdit = false;
+
+                if (betAInput) {
+                    betAInput.disabled = !canEdit;
+                    betAInput.style.backgroundColor = canEdit ? "rgba(130, 177, 255, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(130, 177, 255, 0.15)";
+                    betAInput.style.color = canEdit ? "#1A0B2E" : "#fff";
+                }
+                if (betBInput) {
+                    betBInput.disabled = !canEdit;
+                    betBInput.style.backgroundColor = canEdit ? "rgba(255, 138, 128, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(255, 138, 128, 0.15)";
+                    betBInput.style.color = canEdit ? "#1A0B2E" : "#fff";
+                }
+            }
+        });
+    });
+
+    gracze.forEach((g, idx) => {
+        const el = document.getElementById('score-'+g.id);
+        if (el) el.innerText = punkty[idx];
+    });
+
+    const tbody = document.getElementById('leaderboard');
+    const wiersze = Array.from(tbody.querySelectorAll('tr'));
+    wiersze.sort((a, b) => parseInt(b.cells[2].innerText) - parseInt(a.cells[2].innerText));
+    wiersze.forEach((wiersz, index) => {
+        let miejsce = index + 1;
+        let ikona = miejsce === 1 ? ' 👑' : miejsce === 2 ? ' 🥈' : miejsce === 3 ? ' 🥉' : '';
+        wiersz.cells[0].innerText = miejsce + ikona;
+        tbody.appendChild(wiersz);
+    });
+}
+
+setInterval(() => { syncFromFirebaseSnapshot(); obliczPunkty(); }, 5000);
+</script>
+</body>
+</html>

@@ -2,10 +2,14 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1A0B2E">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Nasz Typer - Mundial 2026</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+        * { -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Poppins', sans-serif; 
@@ -154,16 +158,7 @@
 
         /* PUNKTY W ROGU OKIENKA */
         .match-points {
-            position: absolute;
-            top: 6px;
-            right: 8px;
-            font-size: 0.7em;
-            color: rgba(255,255,255,0.4);
-            background: rgba(0,0,0,0.3);
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-weight: 800;
-            transition: all 0.3s ease;
+            position: absolute; top: 6px; right: 8px; font-size: 0.7em; color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 6px; font-weight: 800; transition: all 0.3s ease;
         }
         .match-points.exact { background: rgba(0, 229, 255, 0.2); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.4); }
         .match-points.partial { background: rgba(105, 240, 174, 0.2); color: #69F0AE; border: 1px solid rgba(105, 240, 174, 0.4); }
@@ -173,42 +168,11 @@
 
         .stage-info { text-align: center; color: rgba(255,255,255,0.45); font-size: 0.8em; margin-bottom: 20px; }
 
-        /* WERSJA MOBILNA */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .container { padding: 15px; }
-            
-            .logout-btn { 
-                position: static; display: block; margin: 0 auto 20px auto; 
-                padding: 6px 12px; font-size: 0.8em; 
-            }
-            .info-btn { top: 15px; left: 15px; width: 35px; height: 35px; font-size: 1.1em; }
-
-            h1 { font-size: 1.8em; margin-bottom: 25px; margin-top: 15px; }
-            .ranking-header { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-            .welcome-msg { position: static; }
-            h2 { font-size: 1.3em; margin-top: 25px; }
-            .login-box { padding: 25px; width: 95%; }
-            .login-box select, .login-box input[type="password"], .login-box button { font-size: 1em; padding: 12px; }
-            th, td { padding: 10px 5px; font-size: 0.85em; }
-            .match { padding: 15px; }
-            .match-header { font-size: 1em; gap: 6px; }
-            .score-input { width: 35px; padding: 8px; font-size: 1em; }
-            .players-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; }
-            .player-bet { padding: 15px 5px 10px 5px; font-size: 0.8em; }
-            .player-bet input { width: 30px; padding: 4px; font-size: 0.9em; }
-            .stage-btn { font-size: 0.78em; padding: 7px 12px; }
-            .match-points { font-size: 0.65em; top: 4px; right: 4px; padding: 2px 4px; }
-            .status-live, .status-ended { display: block; margin-top: 5px; margin-left: 0; }
-        }
-
-
         /* FLAGI W ROGACH */
         .flag-left, .flag-right {
             position: absolute; top: 0; width: 60px; height: 45px;
             object-fit: cover; opacity: 0.15; transition: all 0.4s ease;
-            pointer-events: none; /* Żeby nie blokowały klikania myszką */
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
         .match:hover .flag-left, .match:hover .flag-right { opacity: 0.4; }
         .flag-left { 
@@ -219,8 +183,47 @@
             right: 0; border-top-right-radius: 15px; 
             -webkit-mask-image: linear-gradient(to bottom left, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%);
         }
-        /* 🔼 KONIEC WKLEJKI 🔼 */
 
+        /* WERSJA MOBILNA - PREMIUM UX */
+        @media (max-width: 768px) {
+            body { padding: 5px; }
+            .container { padding: 12px; }
+            
+            .logout-btn { position: static; display: block; margin: 0 auto 20px auto; padding: 6px 12px; font-size: 0.8em; }
+            .info-btn { top: 12px; left: 12px; width: 32px; height: 32px; font-size: 1.1em; }
+
+            h1 { font-size: 1.6em; margin-bottom: 20px; margin-top: 10px; }
+            .ranking-header { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+            .welcome-msg { position: static; }
+            h2 { font-size: 1.3em; margin-top: 20px; }
+            
+            .stage-nav, .day-filter-bar { 
+                flex-wrap: nowrap; overflow-x: auto; padding-bottom: 10px; 
+                -webkit-overflow-scrolling: touch; justify-content: flex-start; 
+                scrollbar-width: none; 
+            }
+            .stage-nav::-webkit-scrollbar, .day-filter-bar::-webkit-scrollbar { display: none; }
+            .stage-btn, .day-btn { flex-shrink: 0; }
+
+            .login-box, .rules-box { padding: 25px; width: 95%; }
+            .login-box select, .login-box input[type="password"], .login-box button, .score-input, .player-bet input { 
+                font-size: 16px !important; 
+            }
+            .login-box select, .login-box input[type="password"], .login-box button, .rules-box button { padding: 12px; }
+            
+            th, td { padding: 8px 4px; font-size: 0.8em; }
+            
+            .match { padding: 15px; margin-bottom: 15px; border-radius: 12px; }
+            .match-header { font-size: 0.95em; gap: 6px; }
+            .score-input { width: 38px; padding: 6px; }
+            
+            .players-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; }
+            .player-bet { padding: 10px 4px 8px 4px; font-size: 0.8em; border-radius: 8px; }
+            .player-bet input { width: 32px; padding: 4px; margin-top: 6px; }
+            
+            .match-points { font-size: 0.65em; top: 4px; right: 4px; padding: 2px 4px; }
+            .status-live, .status-ended { display: block; margin-top: 5px; margin-left: 0; }
+        }
     </style>
 </head>
 <body>
@@ -252,8 +255,8 @@
         <ul>
             <li>Za trafienie <strong>idealnego wyniku</strong> otrzymujesz <strong>3 punkty</strong>.</li>
             <li>Za trafienie <strong>rozstrzygnięcia meczu</strong> (czyli np. kto wygra lub trafienie, że będzie remis) otrzymujesz <strong>1 punkt</strong>.</li>
-            <li>Złe wytypowanie lub jego brak to <strong>0 punktów</strong>.</li>
-            <li>Swoje typy możesz dodawać i modyfikować w dowolnej chwili, aż do <strong>pierwszej minuty meczu</strong>. Po pierwszym gwizdku okienka blokują się automatycznie na zawsze!</li>
+            <li>Złe wytypowanie to <strong>0 punktów</strong>.</li>
+            <li>Swoje typy możesz dodawać i modyfikować w dowolnej chwili, aż do <strong>kolejnej pierwszej minuty meczu</strong>. Po pierwszym gwizdku okienka blokują się automatycznie na zawsze!</li>
             <li>Typujemy wynik z regulaminowego czasu gry (bez potencjalnych dogrywek i rzutów karnych).</li>
         </ul>
         <button onclick="document.getElementById('rules-modal').style.display='none'">Rozumiem, gramy!</button>
@@ -371,7 +374,7 @@ function wyloguj() {
     location.reload();
 }
 
-    // ─── SŁOWNIK FLAG ─────────────────────────────────────────────────────────────
+// ─── SŁOWNIK FLAG ─────────────────────────────────────────────────────────────
 const flagi = {
     "Meksyk": "mx", "RPA": "za", "Korea Płd.": "kr", "Czechy": "cz",
     "Kanada": "ca", "Bośnia i Herce.": "ba", "USA": "us", "Paragwaj": "py",
@@ -589,7 +592,6 @@ function renderMatches() {
         html += `<div class="day-block"><div class="day-label">${dzien}</div>`;
         mecze.forEach(mecz => {
             
-            // 🔽 STĄD ZAZNACZ I WKLEJ NOWY FRAGMENT: 🔽
             const gc = groupColors[mecz.group] || { text: "#00E5FF", bg: "rgba(0,229,255,0.15)", border: "rgba(0,229,255,0.3)" };
             const tagHTML = mecz.group
                 ? `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`
@@ -602,7 +604,6 @@ function renderMatches() {
                     <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff; position: relative; z-index: 2;">:<input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff; position: relative; z-index: 2;">
                 </div>`).join('');
 
-            // Dodanie flag z API
             const flagLeft = flagi[mecz.dom] ? `<img src="https://flagcdn.com/w80/${flagi[mecz.dom]}.png" class="flag-left">` : '';
             const flagRight = flagi[mecz.wyjazd] ? `<img src="https://flagcdn.com/w80/${flagi[mecz.wyjazd]}.png" class="flag-right">` : '';
 
@@ -622,8 +623,6 @@ function renderMatches() {
                 <div class="match-meta" style="position: relative; z-index: 2;">${mecz.dzien} · godz. ${mecz.godzPL} &nbsp;·&nbsp; ${mecz.venue}</div>
                 <div class="players-grid" style="position: relative; z-index: 2;">${playerBets}</div>
             </div>`;
-// 🔼 DOTĄD ZAZNACZ I PODMIEŃ 🔼
-            
         });
         html += '</div>';
     }

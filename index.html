@@ -201,6 +201,26 @@
             .match-points { font-size: 0.65em; top: 4px; right: 4px; padding: 2px 4px; }
             .status-live, .status-ended { display: block; margin-top: 5px; margin-left: 0; }
         }
+
+
+        /* FLAGI W ROGACH */
+        .flag-left, .flag-right {
+            position: absolute; top: 0; width: 90px; height: 70px;
+            object-fit: cover; opacity: 0.15; transition: all 0.4s ease;
+            pointer-events: none; /* Żeby nie blokowały klikania myszką */
+            z-index: 0;
+        }
+        .match:hover .flag-left, .match:hover .flag-right { opacity: 0.4; }
+        .flag-left { 
+            left: 0; border-top-left-radius: 15px; 
+            -webkit-mask-image: linear-gradient(to bottom right, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%);
+        }
+        .flag-right { 
+            right: 0; border-top-right-radius: 15px; 
+            -webkit-mask-image: linear-gradient(to bottom left, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%);
+        }
+        /* 🔼 KONIEC WKLEJKI 🔼 */
+
     </style>
 </head>
 <body>
@@ -350,6 +370,22 @@ function wyloguj() {
     localStorage.removeItem('typer_user_id');
     location.reload();
 }
+
+    // ─── SŁOWNIK FLAG ─────────────────────────────────────────────────────────────
+const flagi = {
+    "Meksyk": "mx", "RPA": "za", "Korea Płd.": "kr", "Czechy": "cz",
+    "Kanada": "ca", "Bośnia i Herce.": "ba", "USA": "us", "Paragwaj": "py",
+    "Katar": "qa", "Szwajcaria": "ch", "Brazylia": "br", "Maroko": "ma",
+    "Haiti": "ht", "Szkocja": "gb-sct", "Australia": "au", "Turcja": "tr",
+    "Niemcy": "de", "Curaçao": "cw", "Holandia": "nl", "Japonia": "jp",
+    "Wybrzeże Koś.": "ci", "Ekwador": "ec", "Szwecja": "se", "Tunezja": "tn",
+    "Hiszpania": "es", "Wyspy Zielonego Przyl.": "cv", "Belgia": "be", "Egipt": "eg",
+    "Arabia Saud.": "sa", "Urugwaj": "uy", "Iran": "ir", "Nowa Zelandia": "nz",
+    "Francja": "fr", "Senegal": "sn", "Irak": "iq", "Norwegia": "no",
+    "Argentyna": "ar", "Algieria": "dz", "Austria": "at", "Jordania": "jo",
+    "Portugalia": "pt", "DR Kongo": "cd", "Anglia": "gb-eng", "Chorwacja": "hr",
+    "Ghana": "gh", "Panama": "pa", "Uzbekistan": "uz", "Kolumbia": "co"
+};
 
 // ─── PEŁNY HARMONOGRAM ───────────────────────────────────────────────────────
 const harmonogram = [
@@ -553,6 +589,7 @@ function renderMatches() {
         html += `<div class="day-block"><div class="day-label">${dzien}</div>`;
         mecze.forEach(mecz => {
             
+            // 🔽 STĄD ZAZNACZ I WKLEJ NOWY FRAGMENT: 🔽
             const gc = groupColors[mecz.group] || { text: "#00E5FF", bg: "rgba(0,229,255,0.15)", border: "rgba(0,229,255,0.3)" };
             const tagHTML = mecz.group
                 ? `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`
@@ -562,12 +599,18 @@ function renderMatches() {
                 <div class="player-bet">
                     <span class="match-points" id="pts-${mecz.id}-${g.id}">0 pkt</span>
                     ${g.name}<br>
-                    <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff;">:<input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff;">
+                    <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff; position: relative; z-index: 2;">:<input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff; position: relative; z-index: 2;">
                 </div>`).join('');
+
+            // Dodanie flag z API
+            const flagLeft = flagi[mecz.dom] ? `<img src="https://flagcdn.com/w80/${flagi[mecz.dom]}.png" class="flag-left">` : '';
+            const flagRight = flagi[mecz.wyjazd] ? `<img src="https://flagcdn.com/w80/${flagi[mecz.wyjazd]}.png" class="flag-right">` : '';
 
             html += `
             <div class="match" data-match="${mecz.id}" id="match-div-${mecz.id}">
-                <div class="match-header">
+                ${flagLeft}
+                ${flagRight}
+                <div class="match-header" style="position: relative; z-index: 2;">
                     <span style="color: #82B1FF; text-shadow: 0 0 8px rgba(130, 177, 255, 0.4);">${mecz.dom}</span>
                     <input type="number" class="score-input real-score" id="real-${mecz.id}-a" placeholder="-" style="background: rgba(130, 177, 255, 0.9); border: 2px solid rgba(130, 177, 255, 0.4); color: #1A0B2E;">
                     <span style="color: #fff; margin: 0 5px;">:</span>
@@ -576,9 +619,11 @@ function renderMatches() {
                     ${tagHTML}
                     <span id="status-${mecz.id}"></span>
                 </div>
-                <div class="match-meta">${mecz.dzien} · godz. ${mecz.godzPL} &nbsp;·&nbsp; ${mecz.venue}</div>
-                <div class="players-grid">${playerBets}</div>
+                <div class="match-meta" style="position: relative; z-index: 2;">${mecz.dzien} · godz. ${mecz.godzPL} &nbsp;·&nbsp; ${mecz.venue}</div>
+                <div class="players-grid" style="position: relative; z-index: 2;">${playerBets}</div>
             </div>`;
+// 🔼 DOTĄD ZAZNACZ I PODMIEŃ 🔼
+            
         });
         html += '</div>';
     }

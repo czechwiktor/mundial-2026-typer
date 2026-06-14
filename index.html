@@ -12,7 +12,11 @@
         * { -webkit-tap-highlight-color: transparent; }
 
        html, body {
-            overscroll-behavior: none; /* <-- To blokuje efekt "gumki" i odklejania strony od krawędzi */
+            overscroll-behavior: none; /* Blokuje gumkę z góry i dołu */
+            overflow-x: hidden; /* Odcina możliwość przesuwania strony na boki */
+            max-width: 100%; /* Trzyma stronę w ryzach szerokości ekranu */
+            touch-action: manipulation; /* Całkowicie blokuje "double-tap to zoom" (powiększanie przez podwójne kliknięcie) */
+            -webkit-text-size-adjust: 100%; /* Blokuje dziwne skalowanie na iPhonie po obróceniu ekranu */
         }
 
         body { 

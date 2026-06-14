@@ -849,10 +849,16 @@ function toggleChat() {
     chat.style.display = isHidden ? 'flex' : 'none';
     
     if (isHidden) {
-        document.body.style.overflow = 'hidden'; // Zamraża tło
+        // Twarde i bezwzględne zamrożenie tła dla iOS oraz Androida
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100dvh';
         scrollToBottom();
     } else {
-        document.body.style.overflow = ''; // Odmraża tło po zamknięciu
+        // Przywrócenie normalnego przewijania po zamknięciu czatu
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.style.height = '';
     }
 }
 

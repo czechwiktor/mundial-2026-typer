@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1A0B2E">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Nasz Typer - Mundial 2026</title>
@@ -612,11 +612,12 @@ function renderMatches() {
                 ? `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`
                 : `<span class="ko-tag">${mecz.stage}</span>`;
 
-            const playerBets = gracze.map(g => `
+           const playerBets = gracze.map(g => `
                 <div class="player-bet">
                     <span class="match-points" id="pts-${mecz.id}-${g.id}">0 pkt</span>
                     ${g.name}<br>
-                    <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff; position: relative; z-index: 2;">:<input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff; position: relative; z-index: 2;">
+                    <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-a" style="background: rgba(130, 177, 255, 0.15); border: 2px solid rgba(130, 177, 255, 0.2); color: #fff; position: relative; z-index: 2;">
+                    <input type="number" class="score-input bet-input" id="bet-${mecz.id}-${g.id}-b" style="background: rgba(255, 138, 128, 0.15); border: 2px solid rgba(255, 138, 128, 0.2); color: #fff; position: relative; z-index: 2;">
                 </div>`).join('');
 
             const flagLeft = flagi[mecz.dom] ? `<img src="https://flagcdn.com/w80/${flagi[mecz.dom]}.png" class="flag-left">` : '';

@@ -9,14 +9,19 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
 
-        * { -webkit-tap-highlight-color: transparent; }
+        *, *::before, *::after { 
+            -webkit-tap-highlight-color: transparent; 
+            box-sizing: border-box; /* To zmusza KAŻDY element, by nigdy nie przekroczył 100% szerokości */
+        }
 
        html, body {
-            overscroll-behavior: none; /* Blokuje gumkę z góry i dołu */
-            overflow-x: hidden; /* Odcina możliwość przesuwania strony na boki */
-            max-width: 100%; /* Trzyma stronę w ryzach szerokości ekranu */
-            touch-action: manipulation; /* Całkowicie blokuje "double-tap to zoom" (powiększanie przez podwójne kliknięcie) */
-            -webkit-text-size-adjust: 100%; /* Blokuje dziwne skalowanie na iPhonie po obróceniu ekranu */
+            overscroll-behavior-y: auto;
+            overscroll-behavior-x: none;
+            overflow-x: hidden;
+            width: 100vw; /* Zamurowanie szerokości do równych 100% ekranu */
+            max-width: 100%; 
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
         }
 
         body { 

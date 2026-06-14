@@ -193,6 +193,8 @@
         .chat-input-area input {
             flex: 1; padding: 12px; border-radius: 10px; border: none; background: rgba(255,255,255,0.9);
             font-family: 'Poppins', sans-serif; outline: none; font-size: 16px !important;
+            min-width: 0; /* <-- Zabija domyślną szerokość Androida */
+            box-sizing: border-box; /* <-- Trzyma paddingi w ryzach */
         }
         .chat-input-area button { background: #00E5FF; border: none; border-radius: 10px; padding: 0 15px; margin-left: 10px; cursor: pointer; font-weight: bold; color: #1A0B2E; transition: 0.2s; }
         

@@ -996,6 +996,55 @@ function scrollToBottom() {
 }
 
 setInterval(() => { syncFromFirebaseSnapshot(); obliczPunkty(); }, 5000);
+
+
+// ─── INTELIGENTNA BLOKADA POMNIEJSZANIA PONIŻEJ 100% ────────────────────────
+let startDistance = 0;
+
+document.addEventListener('touchstart', function (event) {
+    if (event.touches.length === 2) {
+        // Mierzymy początkowy rozstaw palców (odległość między dwoma punktami)
+        startDistance = Math.hypot(
+            event.touches[0].pageX - event.touches[1].pageX,
+            event.touches[0].pageY - event.touches[1].pageY
+        );
+    }
+}, { passive: false });
+
+document.addEventListener('touchmove', function (event) {
+    if (event.touches.length === 2) {
+        // Mierzymy obecny rozstaw palców podczas ruchu
+        const currentDistance = Math.hypot(
+            event.touches[0].pageX - event.touches[1].pageX,
+            event.touches[0].pageY - event.touches[1].pageY
+        );
+        
+        // Jeśli obecny dystans jest mniejszy niż początkowy -> użytkownik ZSUWA palce (pomniejsza ekran)
+        const isZoomingOut = currentDistance < startDistance;
+        
+        // Sprawdzamy, czy strona jest już w swoim normalnym rozmiarze (około 1.0)
+        // Dajemy zapas 1.02 na drobne błędy zaokrągleń w przeglądarkach
+        const isAtMinimumZoom = window.visualViewport ? window.visualViewport.scale <= 1.02 : true;
+
+        // Jeśli użytkownik pomniejsza, a strona osiągnęła już stan wyjściowy -> STOP
+        if (isZoomingOut && isAtMinimumZoom) {
+            event.preventDefault();
+        }
+        
+        startDistance = currentDistance; // Aktualizujemy dystans do płynnego liczenia w locie
+    }
+}, { passive: false });
+
+// Dodatkowe, twarde zabezpieczenie dedykowane dla Apple Safari (iOS)
+document.addEventListener('gesturechange', function (event) {
+    const isAtMinimumZoom = window.visualViewport ? window.visualViewport.scale <= 1.02 : true;
+    // event.scale < 1.0 oznacza, że użytkownik wykonuje gest uszczypnięcia do wewnątrz
+    if (event.scale < 1.0 && isAtMinimumZoom) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+    
 </script>
 </body>
 </html>

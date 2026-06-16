@@ -843,22 +843,33 @@ function obliczPunkty() {
 }
 
 // ─── OBSŁUGA CZATU I REAKCJI ──────────────────────────────────────────────────
+
+let scrollPosition = 0;
+
 function toggleChat() {
     const chat = document.getElementById('chat-window');
     const isHidden = window.getComputedStyle(chat).display === 'none';
     chat.style.display = isHidden ? 'flex' : 'none';
     
     if (isHidden) {
-        // Twarde i bezwzględne zamrożenie tła dla iOS oraz Androida
-        document.documentElement.style.overflow = 'hidden';
+        // Zapisujemy, w którym miejscu na stronie dokładnie jesteś
+        scrollPosition = window.scrollY;
+        
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollPosition}px`;
+        document.body.style.width = '100%';
         document.body.style.overflow = 'hidden';
-        document.body.style.height = '100dvh';
+        
         scrollToBottom();
     } else {
-        // Przywrócenie normalnego przewijania po zamknięciu czatu
-        document.documentElement.style.overflow = '';
+        // Odmrożenie tła po zamknięciu czatu
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
         document.body.style.overflow = '';
-        document.body.style.height = '';
+        
+        
+        window.scrollTo(0, scrollPosition);
     }
 }
 

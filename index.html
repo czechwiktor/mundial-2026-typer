@@ -569,7 +569,7 @@ const harmonogram = [
 // ─── STAN NAWIGACJI ───────────────────────────────────────────────────────────
 const stages = ['Faza grupowa','1/32 finału','1/16 finału','Ćwierćfinały','Półfinały','Finał'];
 let currentStage = 'Faza grupowa';
-let currentDay = null; 
+let currentDay = 'aktualne'; 
 
 // ─── KOLORY GRUP ──────────────────────────────────────────────────────────────
 const groupColors = {
@@ -607,7 +607,7 @@ function renderStageNav() {
 
 function setStage(s) {
     currentStage = s;
-    currentDay = null;
+    currentDay = 'aktualne'; 
     renderStageNav();
     renderDayFilter();
     renderMatches();
@@ -618,7 +618,8 @@ function renderDayFilter() {
     const stageMecze = harmonogram.filter(m => m.stage === currentStage);
     const days = [...new Set(stageMecze.map(m => m.dzien))];
     if (days.length <= 1) { bar.innerHTML = ''; return; }
-    bar.innerHTML = `<button class="day-btn${currentDay===null?' active':''}" onclick="setDay(null)">Wszystkie</button>` +
+    
+    bar.innerHTML = `<button class="day-btn${currentDay==='aktualne'?' active':''}" onclick="setDay('aktualne')">Aktualne</button>` +
         days.map(d => `<button class="day-btn${currentDay===d?' active':''}" onclick="setDay('${d}')">${d}</button>`).join('');
 }
 
@@ -631,8 +632,19 @@ function setDay(d) {
 // ─── GENEROWANIE MECZÓW ───────────────────────────────────────────────────────
 function renderMatches() {
     const stageMecze = harmonogram.filter(m => m.stage === currentStage);
-    const filteredMecze = currentDay ? stageMecze.filter(m => m.dzien === currentDay) : stageMecze;
-
+    
+    let filteredMecze = stageMecze;
+    if (currentDay === 'aktualne') {
+        const dzis = new Date();
+        filteredMecze = stageMecze.filter(m => {
+            const dataMeczu = new Date(m.data);
+            return dataMeczu.getDate() === dzis.getDate() &&
+                   dataMeczu.getMonth() === dzis.getMonth() &&
+                   dataMeczu.getFullYear() === dzis.getFullYear();
+        });
+    } else if (currentDay) {
+        filteredMecze = stageMecze.filter(m => m.dzien === currentDay);
+    }
     const infoMap = {
         'Faza grupowa':  '48 drużyn · 12 grup · 11–27 czerwca',
         '1/32 finału':   '32 drużyny · 28 czerwca – 3 lipca',
@@ -694,7 +706,13 @@ function renderMatches() {
         html += '</div>';
     }
 
-    if (!html) html = '<p style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;">Brak meczów w tym widoku.</p>';
+    if (!html) {
+        if (currentDay === 'aktualne') {
+            html = '<p style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;font-weight:600;">⚽ Brak meczów do rozegrania na dzisiaj w tym etapie.</p>';
+        } else {
+            html = '<p style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;">Brak meczów w tym widoku.</p>';
+        }
+    }
     document.getElementById('lista-meczow').innerHTML = html;
 
     document.querySelectorAll('.score-input').forEach(input => {

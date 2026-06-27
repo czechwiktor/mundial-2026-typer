@@ -858,12 +858,12 @@ function obliczPunkty() {
                 if (betAInput) {
                     betAInput.disabled = !canEdit;
                     betAInput.style.backgroundColor = canEdit ? "rgba(130, 177, 255, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(130, 177, 255, 0.15)";
-                    betAInput.style.color = canEdit ? "#1A0B2E" : "#fff";
+                    betAInput.style.color = canEdit ? "#1A0B2E" : (betAInput.value === '?' ? "rgba(255, 100, 100, 0.7)" : "#fff");
                 }
                 if (betBInput) {
                     betBInput.disabled = !canEdit;
                     betBInput.style.backgroundColor = canEdit ? "rgba(255, 138, 128, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(255, 138, 128, 0.15)";
-                    betBInput.style.color = canEdit ? "#1A0B2E" : "#fff";
+                    betBInput.style.color = canEdit ? "#1A0B2E" : (betBInput.value === '?' ? "rgba(255, 100, 100, 0.7)" : "#fff");
                 }
 
                 if (ptsEl) {

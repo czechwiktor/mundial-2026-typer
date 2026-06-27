@@ -737,44 +737,16 @@ function listenFirebase() {
 }
 
 function syncFromFirebaseSnapshot() {
-    const isAdmin = (myPlayerId === 'admin');
-    const teraz = new Date();
-
     document.querySelectorAll('.score-input').forEach(input => {
-       
-        let realValue = latestSnapshot[input.id] !== undefined ? latestSnapshot[input.id] : '';
-
-        if (input.id.startsWith('bet-')) {
-            const parts = input.id.split('-');
-            const meczId = parts[1];
-            const playerId = parts[2];
-             
-            const mecz = harmonogram.find(m => m.id == meczId);
-            const czasRozpoczecia = mecz ? new Date(mecz.data) : new Date();
-            const hasStarted = teraz >= czasRozpoczecia;
-            
-            const isMe = (playerId === myPlayerId);
-            
-            
-            const isVisible = isAdmin || isMe || hasStarted;
-            
-            if (isVisible) {
-                input.type = 'number';
-                input.value = realValue;
-            } else {
-               
-                input.type = 'text';
-                
-                input.value = realValue !== '' ? '?' : '';
+        if (latestSnapshot[input.id] !== undefined) {
+            if (input.id.startsWith('real-')) {
+                input.value = latestSnapshot[input.id];
             }
-        } 
-        else {
-            input.value = realValue;
         }
     });
 }
-
 // ─── LICZENIE PUNKTÓW I UPRAWNIENIA ──────────────────────────────────────────
+
 function obliczPunkty() {
     let punkty = gracze.map(() => 0);
     let isAdmin = (myPlayerId === 'admin');
@@ -820,15 +792,32 @@ function obliczPunkty() {
             let betBInput = document.getElementById('bet-'+mecz.id+'-'+g.id+'-b');
             let ptsEl = document.getElementById('pts-'+mecz.id+'-'+g.id);
 
-            let betA = betAInput ? betAInput.value : (latestSnapshot['bet-'+mecz.id+'-'+g.id+'-a'] || '');
-            let betB = betBInput ? betBInput.value : (latestSnapshot['bet-'+mecz.id+'-'+g.id+'-b'] || '');
+            let rawBetA = latestSnapshot['bet-'+mecz.id+'-'+g.id+'-a'] || '';
+            let rawBetB = latestSnapshot['bet-'+mecz.id+'-'+g.id+'-b'] || '';
 
+            let isMe = g.id === myPlayerId;
+            let isVisible = isAdmin || isMe || (teraz >= czasRozpoczecia);
+
+            let betA = isVisible ? rawBetA : (rawBetA !== '' ? '?' : '');
+            let betB = isVisible ? rawBetB : (rawBetB !== '' ? '?' : '');
+            
+        
+            if (betAInput) {
+                betAInput.type = (betA === '?') ? 'text' : 'number';
+                betAInput.value = betA;
+            }
+            if (betBInput) {
+                betBInput.type = (betB === '?') ? 'text' : 'number';
+                betBInput.value = betB;
+            }
+            
             if (realA !== '' && realB !== '') {
+             
                 if (betAInput) { betAInput.disabled = true; betAInput.style.backgroundColor = "rgba(130, 177, 255, 0.15)"; betAInput.style.color = "#fff"; }
                 if (betBInput) { betBInput.disabled = true; betBInput.style.backgroundColor = "rgba(255, 138, 128, 0.15)"; betBInput.style.color = "#fff"; }
 
                 let currentPts = 0;
-                if (betA !== '' && betB !== '') {
+                if (betA !== '' && betB !== '' && betA !== '?' && betB !== '?') {
                     let ra = parseInt(realA), rb = parseInt(realB);
                     let ba = parseInt(betA), bb = parseInt(betB);
                     let realZnak = Math.sign(ra - rb);
@@ -848,9 +837,8 @@ function obliczPunkty() {
                 }
 
             } else {
-                let isMe = g.id === myPlayerId;
+                
                 let canEdit = isMe || isAdmin;
-
                 let isTimeLocked = isMe && !isAdmin && (teraz >= czasRozpoczecia);
                 
                 if (isTimeLocked) canEdit = false;
@@ -858,12 +846,12 @@ function obliczPunkty() {
                 if (betAInput) {
                     betAInput.disabled = !canEdit;
                     betAInput.style.backgroundColor = canEdit ? "rgba(130, 177, 255, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(130, 177, 255, 0.15)";
-                    betAInput.style.color = canEdit ? "#1A0B2E" : (betAInput.value === '?' ? "rgba(255, 100, 100, 0.7)" : "#fff");
+                    betAInput.style.color = canEdit ? "#1A0B2E" : (betA === '?' ? "rgba(255, 100, 100, 0.7)" : "#fff");
                 }
                 if (betBInput) {
                     betBInput.disabled = !canEdit;
                     betBInput.style.backgroundColor = canEdit ? "rgba(255, 138, 128, 0.9)" : isTimeLocked ? "rgba(200, 50, 50, 0.3)" : "rgba(255, 138, 128, 0.15)";
-                    betBInput.style.color = canEdit ? "#1A0B2E" : (betBInput.value === '?' ? "rgba(255, 100, 100, 0.7)" : "#fff");
+                    betBInput.style.color = canEdit ? "#1A0B2E" : (betB === '?' ? "rgba(255, 100, 100, 0.7)" : "#fff");
                 }
 
                 if (ptsEl) {
@@ -890,6 +878,10 @@ function obliczPunkty() {
     });
 }
 
+
+
+
+    
 // ─── OBSŁUGA CZATU I REAKCJI ──────────────────────────────────────────────────
 
 let scrollPosition = 0;

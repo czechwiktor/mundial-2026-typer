@@ -737,9 +737,39 @@ function listenFirebase() {
 }
 
 function syncFromFirebaseSnapshot() {
+    const isAdmin = (myPlayerId === 'admin');
+    const teraz = new Date();
+
     document.querySelectorAll('.score-input').forEach(input => {
-        if (latestSnapshot[input.id] !== undefined) {
-            input.value = latestSnapshot[input.id];
+       
+        let realValue = latestSnapshot[input.id] !== undefined ? latestSnapshot[input.id] : '';
+
+        if (input.id.startsWith('bet-')) {
+            const parts = input.id.split('-');
+            const meczId = parts[1];
+            const playerId = parts[2];
+             
+            const mecz = harmonogram.find(m => m.id == meczId);
+            const czasRozpoczecia = mecz ? new Date(mecz.data) : new Date();
+            const hasStarted = teraz >= czasRozpoczecia;
+            
+            const isMe = (playerId === myPlayerId);
+            
+            
+            const isVisible = isAdmin || isMe || hasStarted;
+            
+            if (isVisible) {
+                input.type = 'number';
+                input.value = realValue;
+            } else {
+               
+                input.type = 'text';
+                
+                input.value = realValue !== '' ? '?' : '';
+            }
+        } 
+        else {
+            input.value = realValue;
         }
     });
 }

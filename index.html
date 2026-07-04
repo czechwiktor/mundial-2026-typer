@@ -592,6 +592,9 @@ function init() {
     let myName = myPlayerId === 'admin' ? 'Administratorze 👑' : gracze.find(g => g.id === myPlayerId)?.name || '';
     document.getElementById('welcome-msg').innerText = `Witaj, ${myName} 👋`;
 
+    currentStage = '1/8 finału';
+    currentDay = 'aktualne';
+
     renderStageNav();
     renderMatches();
     listenFirebase();

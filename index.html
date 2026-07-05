@@ -357,10 +357,11 @@
         <h3>Trybuna</h3>
         <button class="close-chat" onclick="toggleChat()">✖</button>
     </div>
+    
     <div id="chat-messages" onclick="closeAllPickers()"></div>
     
-    <!-- BANER ODPOWIEDZI (Teraz jest bezpiecznie nad polem, a nie w środku!) -->
-    <div id="reply-preview" style="display: none; align-items: center; background: rgba(0, 229, 255, 0.15); border-left: 4px solid #00E5FF; padding: 8px 12px; font-size: 13px; text-align: left; box-sizing: border-box; border-top: 1px solid rgba(255,255,255,0.1);">
+    
+    <div id="reply-preview" style="display: none; align-items: center; background: rgba(0, 229, 255, 0.15); border-left: 4px solid #00E5FF; border-top: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; font-size: 13px; text-align: left; flex-shrink: 0;">
         <div style="flex: 1; overflow: hidden; padding-right: 10px;">
             <div style="color: #00E5FF; font-weight: bold; margin-bottom: 2px;" id="reply-name"></div>
             <div style="color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-style: italic;" id="reply-text"></div>
@@ -368,7 +369,8 @@
         <button onclick="anulujOdpowiedz()" style="background: none; border: none; color: #ff4757; font-size: 26px; line-height: 1; padding: 5px 10px; cursor: pointer; -webkit-tap-highlight-color: transparent;">×</button>
     </div>
 
-    <div class="chat-input-area">
+  
+    <div class="chat-input-area" style="display: flex !important; flex-direction: row !important;">
         <input type="text" id="chat-input" placeholder="Napisz wiadomość..." onkeypress="handleChatKey(event)" onfocus="setTimeout(scrollToBottom, 300)">
         <button onclick="wyslijWiadomosc()">Wyślij</button>
     </div>
@@ -900,9 +902,6 @@ function obliczPunkty() {
 
 let scrollPosition = 0;
 
-// Logika odpowiedzi
-let aktualnaOdpowiedz = null;
-
 let aktualnaOdpowiedz = null;
 
 function ustawOdpowiedz(imie, tekst) {
@@ -911,6 +910,9 @@ function ustawOdpowiedz(imie, tekst) {
     document.getElementById('reply-name').innerText = "Odpowiadasz: " + imie;
     document.getElementById('reply-text').innerText = tekst;
     document.getElementById('chat-input').focus();
+    
+    
+    document.querySelector('.chat-input-area').style.flexDirection = 'row';
 }
 
 function anulujOdpowiedz() {

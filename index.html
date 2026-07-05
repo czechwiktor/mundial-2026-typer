@@ -359,7 +359,16 @@
     </div>
     <div id="chat-messages" onclick="closeAllPickers()"></div>
     <div class="chat-input-area">
+        <div id="reply-preview" style="display: none; flex-direction: row; align-items: center; background: rgba(0, 229, 255, 0.15); border-left: 4px solid #00E5FF; padding: 8px 12px; margin-bottom: 8px; border-radius: 6px; font-size: 13px; text-align: left; width: 100%;">
+            <div style="flex: 1; overflow: hidden; padding-right: 10px;">
+                <div style="color: #00E5FF; font-weight: bold; margin-bottom: 2px;" id="reply-name"></div>
+                <div style="color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-style: italic;" id="reply-text"></div>
+            </div>
+            <button onclick="anulujOdpowiedz()" style="background: none; border: none; color: #ff4757; font-size: 26px; line-height: 1; padding: 5px 10px; cursor: pointer; -webkit-tap-highlight-color: transparent;">×</button>
+        </div>
+        
         <input type="text" id="chat-input" placeholder="Napisz wiadomość..." onkeypress="handleChatKey(event)" onfocus="setTimeout(scrollToBottom, 300)">
+    
         <button onclick="wyslijWiadomosc()">Wyślij</button>
     </div>
 </div>
@@ -890,6 +899,27 @@ function obliczPunkty() {
 
 let scrollPosition = 0;
 
+// Logika odpowiedzi
+let aktualnaOdpowiedz = null;
+
+function ustawOdpowiedz(imie, tekst) {
+    aktualnaOdpowiedz = { name: imie, text: tekst };
+    
+    document.querySelector('.chat-input-area').style.flexDirection = 'column';
+    document.getElementById('reply-preview').style.display = 'flex';
+    document.getElementById('reply-name').innerText = "Odpowiadasz: " + imie;
+    document.getElementById('reply-text').innerText = tekst;
+    document.getElementById('chat-input').focus();
+}
+
+function anulujOdpowiedz() {
+    aktualnaOdpowiedz = null;
+    document.getElementById('reply-preview').style.display = 'none';
+    document.querySelector('.chat-input-area').style.flexDirection = 'row';
+}
+
+    
+
 function toggleChat() {
     const chat = document.getElementById('chat-window');
     const isHidden = window.getComputedStyle(chat).display === 'none';
@@ -924,13 +954,20 @@ function wyslijWiadomosc() {
     
     const myName = myPlayerId === 'admin' ? 'Admin 👑' : gracze.find(g => g.id === myPlayerId)?.name || 'Ktoś';
     
-    db.ref('mundial-chat').push({
+    let msgObj = {
         authorId: myPlayerId,
         authorName: myName,
         text: text,
         timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
+    };
+
+    if (aktualnaOdpowiedz) {
+        msgObj.reply = aktualnaOdpowiedz;
+    }
+
+    db.ref('mundial-chat').push(msgObj);
     input.value = '';
+    anulujOdpowiedz();
 }
 
 function handleChatKey(e) {
@@ -974,9 +1011,31 @@ function listenChat() {
             emojis.forEach(e => {
                 reactsHtml += `<span onclick="event.stopPropagation(); toggleReact('${msgId}', '${e}'); this.parentElement.classList.remove('show-picker');">${e}</span>`;
             });
-            reactsHtml += `</div></div>`;
+           reactsHtml += `</div></div>`;
 
-            div.innerHTML = `<div class="msg-header"><span class="msg-author">${msg.authorName}</span><span class="msg-time">${formatMessageTime(msg.timestamp)}</span></div>${msg.text}${reactsHtml}`;
+            // Przygotowanie cytatu
+            const bezpiecznyTekst = msg.text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            let cytatHtml = '';
+            if (msg.reply) {
+                cytatHtml = `
+                    <div style="background: rgba(0,0,0,0.25); padding: 5px 8px; border-radius: 4px; margin: 4px 0; border-left: 2px solid rgba(255,255,255,0.4); font-size: 11px; text-align: left;">
+                        <div style="color: #00E5FF; font-weight: bold; margin-bottom: 2px;">${msg.reply.name}</div>
+                        <div style="color: #aaa; font-style: italic;">"${msg.reply.text}"</div>
+                    </div>
+                `;
+            }
+
+            // Przycisk Odpowiedz
+            let przyciskOdpowiedz = `
+                <div style="text-align: ${isMe ? 'right' : 'left'}; margin-top: 4px;">
+                    <button onclick="ustawOdpowiedz('${msg.authorName}', '${bezpiecznyTekst}')" 
+                            style="background: none; border: none; color: #888; font-size: 11px; padding: 4px 0; cursor: pointer; -webkit-tap-highlight-color: transparent;">
+                        ⮪ Odpowiedz
+                    </button>
+                </div>
+            `;
+
+            div.innerHTML = `<div class="msg-header"><span class="msg-author">${msg.authorName}</span><span class="msg-time">${formatMessageTime(msg.timestamp)}</span></div>${cytatHtml}<div style="margin-bottom:4px;">${msg.text}</div>${reactsHtml}${przyciskOdpowiedz}`;
             chatBox.appendChild(div);
         });
         

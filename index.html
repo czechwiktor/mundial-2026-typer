@@ -599,12 +599,32 @@ const groupColors = {
     "L": { text: "#9C27B0", bg: "rgba(156, 39, 176, 0.15)", border: "rgba(156, 39, 176, 0.3)" }
 };
 
+
+
+// ─── INTELIGENTNE WYKRYWANIE ETAPU ────────────────────────────────────────────
+function getAktywnyEtapTurnieju() {
+    const dzis = new Date();
+    const dzisStr = dzis.toDateString();
+
+    // 1. Sprawdza, czy dzisiaj są jakieś mecze
+    const dzisiejsze = harmonogram.filter(m => new Date(m.data).toDateString() === dzisStr);
+    if (dzisiejsze.length > 0) return dzisiejsze[0].stage;
+
+    // 2. Jeśli dzisiaj jest dzień przerwy, szuka najbliższego przyszłego meczu
+    const przyszle = harmonogram.filter(m => new Date(m.data) > dzis);
+    if (przyszle.length > 0) return przyszle[0].stage;
+
+    // 3. Jeśli turniej się zakończył
+    return 'Finał';
+}
+    
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
     let myName = myPlayerId === 'admin' ? 'Administratorze 👑' : gracze.find(g => g.id === myPlayerId)?.name || '';
     document.getElementById('welcome-msg').innerText = `Witaj, ${myName} 👋`;
 
-    currentStage = '1/8 finału';
+    currentStage = getAktywnyEtapTurnieju();
     currentDay = 'aktualne';
 
     renderStageNav();
@@ -622,21 +642,38 @@ function renderStageNav() {
 
 function setStage(s) {
     currentStage = s;
-    currentDay = 'aktualne'; 
+    
+    if (currentStage === getAktywnyEtapTurnieju()) {
+        currentDay = 'aktualne';
+    } else {
+    
+        const stageMecze = harmonogram.filter(m => m.stage === currentStage);
+        const days = [...new Set(stageMecze.map(m => m.dzien))];
+        currentDay = days.length > 0 ? days[0] : '';
+    }
+
     renderStageNav();
     renderDayFilter();
     renderMatches();
 }
+    
 
 function renderDayFilter() {
     const bar = document.getElementById('day-filter-bar');
     const stageMecze = harmonogram.filter(m => m.stage === currentStage);
     const days = [...new Set(stageMecze.map(m => m.dzien))];
-    if (days.length <= 1) { bar.innerHTML = ''; return; }
     
-    bar.innerHTML = `<button class="day-btn${currentDay==='aktualne'?' active':''}" onclick="setDay('aktualne')">Aktualne</button>` +
-        days.map(d => `<button class="day-btn${currentDay===d?' active':''}" onclick="setDay('${d}')">${d}</button>`).join('');
+    let html = '';
+    
+    if (currentStage === getAktywnyEtapTurnieju()) {
+        html += `<button class="day-btn${currentDay==='aktualne'?' active':''}" onclick="setDay('aktualne')">Aktualne</button>`;
+    }
+    
+    html += days.map(d => `<button class="day-btn${currentDay===d?' active':''}" onclick="setDay('${d}')">${d}</button>`).join('');
+    
+    bar.innerHTML = html;
 }
+    
 
 function setDay(d) {
     currentDay = d;

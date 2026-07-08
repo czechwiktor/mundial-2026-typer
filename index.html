@@ -8,12 +8,11 @@
     <title>Nasz Typer - Mundial 2026</title>
     <style>
 
-       
         @keyframes clashPop {
-            0% { transform: scale(0.5); opacity: 0; }
-            55% { transform: scale(1.08); opacity: 1; }
-            75% { transform: scale(0.96); }
-            90% { transform: scale(1.02); }
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.04); opacity: 1; }
+            70% { transform: scale(0.98); }
+            85% { transform: scale(1.01); }
             100% { transform: scale(1); opacity: 1; }
         }
         
@@ -58,7 +57,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             text-align: center; max-width: 400px; width: 90%;
            
-            animation: clashPop 0.45s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: clashPop 0.55s ease-out forwards;
         }
         
         .rules-box { max-width: 500px; text-align: left; }
@@ -220,7 +219,7 @@
             display: none; flex-direction: column; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden;
            
             transform-origin: bottom right;
-            animation: clashPop 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: clashPop 0.55s ease-out forwards;
         }
         .chat-header {
             background: rgba(0, 229, 255, 0.15); padding: 15px; display: flex; justify-content: space-between; align-items: center;

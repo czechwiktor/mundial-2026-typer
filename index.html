@@ -742,9 +742,28 @@ function renderMatches() {
         mecze.forEach(mecz => {
             
             const gc = groupColors[mecz.group] || { text: "#00E5FF", bg: "rgba(0,229,255,0.15)", border: "rgba(0,229,255,0.3)" };
-            const tagHTML = mecz.group
-                ? `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`
-                : `<span class="ko-tag">${mecz.stage}</span>`;
+            
+            let tagHTML = '';
+            if (mecz.group) {
+                tagHTML = `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`;
+            } else {
+                // ─── HIERARCHIA KOLORÓW FAZY PUCHAROWEJ ───
+                let bg = "rgba(255,200,0,0.15)", col = "#FFD600", bord = "rgba(255,200,0,0.3)", shadow = "none", extra = "";
+                
+                if (mecz.stage === "Ćwierćfinały") {
+                    // BRĄZ / MIEDŹ
+                    bg = "rgba(205, 127, 50, 0.15)"; col = "#FFB073"; bord = "rgba(205, 127, 50, 0.5)"; shadow = "0 0 10px rgba(205, 127, 50, 0.3)";
+                } else if (mecz.stage === "Półfinały") {
+                    // SREBRO / PLATYNA
+                    bg = "rgba(192, 192, 192, 0.15)"; col = "#FFFFFF"; bord = "rgba(192, 192, 192, 0.6)"; shadow = "0 0 12px rgba(255, 255, 255, 0.4)";
+                } else if (mecz.stage === "Finał") {
+                    // ZŁOTO (Solidne)
+                    bg = "linear-gradient(135deg, #FFD700, #FF8F00)"; col = "#1A0B2E"; bord = "transparent"; shadow = "0 0 15px rgba(255, 215, 0, 0.6)"; extra = "text-transform: uppercase; font-weight: 900; letter-spacing: 1px;";
+                }
+                
+                tagHTML = `<span class="ko-tag" style="background: ${bg}; color: ${col}; border: 1px solid ${bord}; box-shadow: ${shadow}; ${extra}">${mecz.stage}</span>`;
+            }
+            
 
            const playerBets = gracze.map(g => `
                 <div class="player-bet">

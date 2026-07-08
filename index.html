@@ -339,6 +339,7 @@
             <li>Złe wytypowanie lub jego brak to <strong>0 punktów</strong>.</li>
             <li>Swoje typy możesz dodawać i modyfikować w dowolnej chwili, aż do <strong>kolejnej pierwszej minuty meczu</strong>. Po pierwszym gwizdku okienka blokują się automatycznie na zawsze!</li>
             <li>Typujemy wynik z regulaminowego czasu gry (bez potencjalnych dogrywek i rzutów karnych).</li>
+            <li>🔥 <strong>MNOŻNIKI:</strong> Od Ćwierćfinałów punkty lecą <strong>x2</strong>, w Półfinałach <strong>x3</strong>, a w Meczach o Medale (Finał i o 3. miejsce) zgarniasz aż <strong>x4</strong> za każdy trafiony typ!</li>
         </ul>
         <button onclick="document.getElementById('rules-modal').style.display='none'">Rozumiem, gramy!</button>
     </div>
@@ -735,7 +736,7 @@ function renderMatches() {
         'Faza grupowa':  '48 drużyn · 12 grup · 11–27 czerwca',
         '1/16 finału':   '32 drużyny · 28 czerwca – 3 lipca',
         '1/8 finału':    '16 drużyn · 4–7 lipca',
-        'Ćwierćfinały':  '8 drużyn · 9–11 lipca',
+        'Ćwierćfinały':  '8 drużyn · 9–12 lipca',
         'Półfinały':     '4 drużyny · 14–15 lipca',
         'Finał':         'Mecz o 3. miejsce (18 lip) + Finał (19 lip) · Nowy Jork / New Jersey',
     };
@@ -757,25 +758,30 @@ function renderMatches() {
             
             const gc = groupColors[mecz.group] || { text: "#00E5FF", bg: "rgba(0,229,255,0.15)", border: "rgba(0,229,255,0.3)" };
             
-            let tagHTML = '';
+           let tagHTML = '';
             if (mecz.group) {
                 tagHTML = `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`;
             } else {
                 // ─── HIERARCHIA KOLORÓW FAZY PUCHAROWEJ ───
                 let bg = "rgba(255,200,0,0.15)", col = "#FFD600", bord = "rgba(255,200,0,0.3)", shadow = "none", extra = "";
+                let mnoznikBadge = ""; // 🔴 NOWOŚĆ: Plakietka mnożnika
                 
                 if (mecz.stage === "Ćwierćfinały") {
                     // BRĄZ / MIEDŹ
                     bg = "rgba(205, 127, 50, 0.15)"; col = "#FFB073"; bord = "rgba(205, 127, 50, 0.5)"; shadow = "0 0 10px rgba(205, 127, 50, 0.3)";
+                    mnoznikBadge = `<span style="background: #FF1744; color: #FFF; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; font-weight: 900; margin-left: 6px; box-shadow: 0 0 8px rgba(255, 23, 68, 0.6); animation: pulse 1.5s infinite;">x2 PKT</span>`;
                 } else if (mecz.stage === "Półfinały") {
                     // SREBRO / PLATYNA
                     bg = "rgba(192, 192, 192, 0.15)"; col = "#FFFFFF"; bord = "rgba(192, 192, 192, 0.6)"; shadow = "0 0 12px rgba(255, 255, 255, 0.4)";
+                    mnoznikBadge = `<span style="background: #FF1744; color: #FFF; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; font-weight: 900; margin-left: 6px; box-shadow: 0 0 10px rgba(255, 23, 68, 0.8); animation: pulse 1.5s infinite;">x3 PKT</span>`;
                 } else if (mecz.stage === "Finał") {
                     // ZŁOTO (Solidne)
                     bg = "linear-gradient(135deg, #FFD700, #FF8F00)"; col = "#1A0B2E"; bord = "transparent"; shadow = "0 0 15px rgba(255, 215, 0, 0.6)"; extra = "text-transform: uppercase; font-weight: 900; letter-spacing: 1px;";
+                    mnoznikBadge = `<span style="background: #FF1744; color: #FFF; padding: 2px 6px; border-radius: 8px; font-size: 0.85em; font-weight: 900; margin-left: 6px; box-shadow: 0 0 15px rgba(255, 23, 68, 1); animation: pulse 1.2s infinite;">x4 PKT 🔥</span>`;
                 }
                 
-                tagHTML = `<span class="ko-tag" style="background: ${bg}; color: ${col}; border: 1px solid ${bord}; box-shadow: ${shadow}; ${extra}">${mecz.stage}</span>`;
+                // Doklejamy mnożnik na samym końcu
+                tagHTML = `<span class="ko-tag" style="background: ${bg}; color: ${col}; border: 1px solid ${bord}; box-shadow: ${shadow}; ${extra}">${mecz.stage}</span>` + mnoznikBadge;
             }
             
 
@@ -881,6 +887,13 @@ function obliczPunkty() {
         const czasRozpoczecia = new Date(mecz.data);
         const czasZakonczenia = new Date(czasRozpoczecia.getTime() + 115 * 60000); 
 
+        // ─── 🔴 NOWOŚĆ: MNOŻNIK PUNKTÓW W ZALEŻNOŚCI OD ETAPU ───
+        let mnoznik = 1;
+        if (mecz.stage === 'Ćwierćfinały') mnoznik = 2;
+        else if (mecz.stage === 'Półfinały') mnoznik = 3;
+        else if (mecz.stage === 'Finał') mnoznik = 4;
+        // ────────────────────────────────────────────────────────
+
         if (statusEl) {
             if (realA !== '' && realB !== '') {
                 statusEl.innerHTML = '<span class="status-ended">ZAKOŃCZONY</span>';
@@ -907,7 +920,6 @@ function obliczPunkty() {
             let betA = isVisible ? rawBetA : (rawBetA !== '' ? '?' : '');
             let betB = isVisible ? rawBetB : (rawBetB !== '' ? '?' : '');
             
-        
             if (betAInput) {
                 betAInput.type = (betA === '?') ? 'text' : 'number';
                 betAInput.value = betA;
@@ -918,7 +930,6 @@ function obliczPunkty() {
             }
             
             if (realA !== '' && realB !== '') {
-             
                 if (betAInput) { betAInput.disabled = true; betAInput.style.backgroundColor = "rgba(130, 177, 255, 0.15)"; betAInput.style.color = "#fff"; }
                 if (betBInput) { betBInput.disabled = true; betBInput.style.backgroundColor = "rgba(255, 138, 128, 0.15)"; betBInput.style.color = "#fff"; }
 
@@ -929,21 +940,23 @@ function obliczPunkty() {
                     let realZnak = Math.sign(ra - rb);
                     
                     if (ra === ba && rb === bb) { 
-                        currentPts = 3; 
-                        punkty[idx] += 3; 
+                        // Zastosowanie mnożnika
+                        currentPts = 3 * mnoznik; 
+                        punkty[idx] += (3 * mnoznik); 
                     } else if (Math.sign(ba - bb) === realZnak) { 
-                        currentPts = 1; 
-                        punkty[idx] += 1; 
+                        // Zastosowanie mnożnika
+                        currentPts = 1 * mnoznik; 
+                        punkty[idx] += (1 * mnoznik); 
                     }
                 }
                 
                 if (ptsEl) {
                     ptsEl.innerText = currentPts + " pkt";
-                    ptsEl.className = "match-points " + (currentPts === 3 ? "exact" : (currentPts === 1 ? "partial" : ""));
+                    // Poprawka kolorowania: sprawdzamy, czy gracz zdobył maksa (3 x mnożnik) lub część (1 x mnożnik)
+                    ptsEl.className = "match-points " + (currentPts === (3 * mnoznik) ? "exact" : (currentPts === (1 * mnoznik) ? "partial" : ""));
                 }
 
             } else {
-                
                 let canEdit = isMe || isAdmin;
                 let isTimeLocked = isMe && !isAdmin && (teraz >= czasRozpoczecia);
                 
@@ -984,9 +997,9 @@ function obliczPunkty() {
     });
 }
 
+    
 
-
-
+    
     
 // ─── OBSŁUGA CZATU I REAKCJI ──────────────────────────────────────────────────
 

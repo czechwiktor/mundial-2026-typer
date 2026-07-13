@@ -723,12 +723,25 @@ function renderMatches() {
     let filteredMecze = stageMecze;
     if (currentDay === 'aktualne') {
         const dzis = new Date();
+      
         filteredMecze = stageMecze.filter(m => {
             const dataMeczu = new Date(m.data);
             return dataMeczu.getDate() === dzis.getDate() &&
                    dataMeczu.getMonth() === dzis.getMonth() &&
                    dataMeczu.getFullYear() === dzis.getFullYear();
         });
+
+        
+        if (filteredMecze.length === 0) {
+            const przyszleMecze = stageMecze.filter(m => new Date(m.data) > dzis);
+            if (przyszleMecze.length > 0) {
+            
+                przyszleMecze.sort((a, b) => new Date(a.data) - new Date(b.data));
+                const najblizszyDzien = przyszleMecze[0].dzien;
+                
+                filteredMecze = stageMecze.filter(m => m.dzien === najblizszyDzien);
+            }
+        }
     } else if (currentDay) {
         filteredMecze = stageMecze.filter(m => m.dzien === currentDay);
     }

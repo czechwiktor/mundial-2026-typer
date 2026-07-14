@@ -321,6 +321,48 @@
         /* ─── STYLOWE PLACEHOLDERY ─── */
         ::placeholder { color: rgba(255, 255, 255, 0.3) !important; font-weight: 400 !important; font-style: italic; }
         .score-input::placeholder { color: rgba(26, 11, 46, 0.3) !important; font-style: normal; }
+
+
+        /* ─── SPORTOWA SIATKA W TLE ─── */
+        body {
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(135deg, #1A0B2E, #281154, #482399) !important;
+            background-size: 30px 30px, 30px 30px, 100% 100% !important;
+            background-attachment: fixed !important;
+        }
+        /* ─── PŁYNĄCY GRADIENT W TYTULE ─── */
+        h1 {
+            background: linear-gradient(270deg, #00E5FF, #69F0AE, #007BFF, #00E5FF);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientTitle 8s ease infinite;
+            filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.3));
+            color: transparent; /* Zabezpieczenie nadpisujące stary kolor */
+        }
+        @keyframes gradientTitle {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* ─── WYODRĘBNIENIE STREFY TYPÓW (BET SLIP) ─── */
+        .players-grid {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 15px;
+            border-radius: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+            margin-top: 15px;
+        }
+        /* Delikatna korekta na telefony */
+        @media (max-width: 768px) {
+            .players-grid { padding: 10px; margin-top: 10px; }
+        }
+
+        
   
     </style>
 </head>

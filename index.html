@@ -711,7 +711,7 @@ const harmonogram = [
     { id:101,dom:"Francja",      wyjazd:"Hiszpania", data:"2026-07-14T19:00:00Z", godzPL:"21:00", stage:"Półfinały", group:null, kolejka:null, venue:"Dallas",  dzien:"Wt, 14 lip" },
     { id:102,dom:"Anglia",       wyjazd:"Argentyna", data:"2026-07-15T19:00:00Z", godzPL:"21:00", stage:"Półfinały", group:null, kolejka:null, venue:"Atlanta", dzien:"Śr, 15 lip" },
     
-    { id:103, dom:"Francja", wyjazd:"Anglia", data:"2026-07-18T21:00:00Z", godzPL:"23:00", stage:"3. miejsce", group:null, kolejka:null, venue:"Miami", dzien:"Sob, 18 lip" },
+    { id:103, dom:"Francja", wyjazd:"Anglia", data:"2026-07-18T21:00:00Z", godzPL:"23:00", stage:"Finał", group:null, kolejka:null, venue:"Miami", dzien:"Sob, 18 lip" },
     { id:104, dom:"Hiszpania", wyjazd:"Argentyna", data:"2026-07-19T19:00:00Z", godzPL:"21:00", stage:"Finał", group:null, kolejka:null, venue:"Nowy Jork/New Jersey", dzien:"Nie, 19 lip" }
 ];
 
@@ -877,25 +877,27 @@ function renderMatches() {
             if (mecz.group) {
                 tagHTML = `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`;
             } else {
-                // ─── HIERARCHIA KOLORÓW FAZY PUCHAROWEJ (BEZ ZMIANY CZCIONKI) ───
+                // ─── HIERARCHIA KOLORÓW FAZY PUCHAROWEJ ───
                 let bg = "rgba(255,200,0,0.15)", col = "#FFD600", bord = "rgba(255,200,0,0.3)", shadow = "none";
                 let mnoznikBadge = ""; 
+                let nazwaEtapu = mecz.stage; 
                 
                 if (mecz.stage === "Ćwierćfinały") {
-                    // BRĄZ / MIEDŹ
                     bg = "rgba(205, 127, 50, 0.15)"; col = "#FFB073"; bord = "rgba(205, 127, 50, 0.5)"; shadow = "0 0 10px rgba(205, 127, 50, 0.3)";
                     mnoznikBadge = `<span style="background: #FF1744; color: #FFF; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; font-weight: 600; margin-left: 6px; box-shadow: 0 0 8px rgba(255, 23, 68, 0.6); animation: pulse 1.5s infinite;">x2 PKT</span>`;
                 } else if (mecz.stage === "Półfinały") {
-                    // SREBRO / PLATYNA
                     bg = "rgba(192, 192, 192, 0.15)"; col = "#FFFFFF"; bord = "rgba(192, 192, 192, 0.6)"; shadow = "0 0 12px rgba(255, 255, 255, 0.4)";
                     mnoznikBadge = `<span style="background: #FF1744; color: #FFF; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; font-weight: 600; margin-left: 6px; box-shadow: 0 0 10px rgba(255, 23, 68, 0.8); animation: pulse 1.5s infinite;">x3 PKT</span>`;
-                } else if (mecz.stage === "Finał" || mecz.stage === "3. miejsce") {
-                    
+                } else if (mecz.stage === "Finał") {
                     bg = "linear-gradient(135deg, #FFD700, #FF8F00)"; col = "#1A0B2E"; bord = "transparent"; shadow = "0 0 15px rgba(255, 215, 0, 0.6)";
                     mnoznikBadge = `<span style="background: #FF1744; color: #FFF; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; font-weight: 600; margin-left: 6px; box-shadow: 0 0 15px rgba(255, 23, 68, 1); animation: pulse 1.2s infinite;">x4 PKT</span>`;
+                    
+                    if (mecz.id === 103) {
+                        nazwaEtapu = "3. MIEJSCE";
+                    }
                 }
                 
-                tagHTML = `<span class="ko-tag" style="background: ${bg}; color: ${col}; border: 1px solid ${bord}; box-shadow: ${shadow};">${mecz.stage}</span>` + mnoznikBadge;
+                tagHTML = `<span class="ko-tag" style="background: ${bg}; color: ${col}; border: 1px solid ${bord}; box-shadow: ${shadow};">${nazwaEtapu}</span>` + mnoznikBadge;
             }
             
 
@@ -1006,7 +1008,7 @@ function obliczPunkty() {
         let mnoznik = 1;
         if (mecz.stage === 'Ćwierćfinały') mnoznik = 2;
         else if (mecz.stage === 'Półfinały') mnoznik = 3;
-        else if (mecz.stage === 'Finał' || mecz.stage === '3. miejsce') mnoznik = 4; 
+        else if (mecz.stage === 'Finał') mnoznik = 4; 
         // ────────────────────────────────────────────────────────
 
         if (statusEl) {

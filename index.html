@@ -42,7 +42,7 @@
             padding: 20px; 
         }
 
-        /* EKRAN LOGOWANIA I ZASAD */
+        
         #login-modal, #rules-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 5, 20, 0.85);
@@ -83,7 +83,7 @@
             max-width: 960px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); 
             backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden; /* <-- Ostateczny pancerz przeciw rozpychaniu */
+            overflow: hidden; 
         }
 
         .logout-btn { 
@@ -94,7 +94,7 @@
         }
         .logout-btn:hover { background: rgba(255,255,255,0.2); }
 
-        /* IKONKA INFO */
+     
         .info-btn {
             position: absolute; top: 30px; left: 30px; 
             background: rgba(0, 229, 255, 0.1); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); 
@@ -105,7 +105,7 @@
 
         h1 { text-align: center; color: #00E5FF; font-weight: 800; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 40px; }
         
-        /* NAGŁÓWEK RANKINGU */
+
         .ranking-header {
             position: relative; text-align: center;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 10px; margin-top: 40px; margin-bottom: 20px; min-height: 40px;
@@ -123,7 +123,7 @@
         tbody tr:hover { background-color: rgba(255, 255, 255, 0.1); transform: scale(1.01); }
         td { font-weight: 600; }
         
-        /* NAWIGACJA ETAPÓW */
+      
         .stage-nav {
             display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 30px 0 20px 0;
         }
@@ -137,7 +137,7 @@
         .stage-btn:hover { background: rgba(0,229,255,0.15); color: #00E5FF; border-color: #00E5FF; }
         .stage-btn.active { background: rgba(0,229,255,0.2); color: #00E5FF; border-color: #00E5FF; box-shadow: 0 0 12px rgba(0,229,255,0.3); }
 
-        /* FILTRY DNI */
+       
         .day-filter-bar { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
         .day-btn {
             background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);
@@ -148,7 +148,7 @@
         .day-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
         .day-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.4); }
 
-        /* BLOK DNIA */
+        
         .day-block { margin-bottom: 10px; }
         .day-label { font-size: 0.8em; font-weight: 600; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; }
         .match { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px; margin-bottom: 25px; transition: all 0.4s ease; position: relative; }
@@ -175,7 +175,7 @@
             letter-spacing: 1px;
         }
         
-        /* STATUSY MECZÓW */
+      
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         .status-live { display: inline-block; color: #FF1744; font-weight: 800; font-size: 0.6em; margin-left: 10px; text-shadow: 0 0 10px rgba(255, 23, 68, 0.7); animation: pulse 1.5s infinite; vertical-align: middle; padding: 2px 8px; border-radius: 12px; background: rgba(255, 23, 68, 0.15); border: 1px solid rgba(255, 23, 68, 0.3); }
         .status-ended { display: inline-block; color: rgba(255,255,255,0.4); font-weight: 600; font-size: 0.6em; margin-left: 10px; vertical-align: middle; padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
@@ -196,7 +196,6 @@
         input[type="number"] { -moz-appearance: textfield; }
         .stage-info { text-align: center; color: rgba(255,255,255,0.45); font-size: 0.8em; margin-bottom: 20px; }
 
-        /* FLAGI W ROGACH */
         .flag-left, .flag-right {
             position: absolute; top: 0; width: 60px; height: 45px;
             object-fit: cover; opacity: 0.15; transition: all 0.4s ease; pointer-events: none; z-index: 0;
@@ -205,7 +204,7 @@
         .flag-left { left: 0; border-top-left-radius: 15px; -webkit-mask-image: linear-gradient(to bottom right, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%); }
         .flag-right { right: 0; border-top-right-radius: 15px; -webkit-mask-image: linear-gradient(to bottom left, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%); }
 
-        /* ─── PŁYWAJĄCY CZAT Z REAKCJAMI ─── */
+       
         #chat-btn {
             position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
             background: #00E5FF; color: #1A0B2E; font-size: 1.8em; display: flex; justify-content: center; align-items: center;
@@ -256,7 +255,7 @@
         .react-picker span { cursor: pointer; transition: transform 0.2s; user-select: none; }
         .react-picker span:hover { transform: scale(1.3); }
 
-        /* WERSJA MOBILNA - PREMIUM UX (Z POPRAWKĄ ŚCISKANIA) */
+        /* WERSJA MOBILNA - Z POPRAWKĄ */
         @media (max-width: 768px) {
             body { padding: 5px; }
             .container { padding: 12px; }
@@ -306,23 +305,23 @@
         }
 
 
-        /* ─── NOWOCZESNY SCROLLBAR ─── */
+        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.2); border-radius: 10px; transition: 0.3s; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.5); }
 
-        /* ─── ODBICIE ŚWIATŁA NA SZKLE ─── */
+        /* ODBICIE ŚWIATŁA  */
         .container, .match, #chat-window, .login-box, .rules-box {
             box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
         }
 
-        /* ─── STYLOWE PLACEHOLDERY ─── */
+        /* PLACEHOLDERY */
         ::placeholder { color: rgba(255, 255, 255, 0.3) !important; font-weight: 400 !important; font-style: italic; }
         .score-input::placeholder { color: rgba(26, 11, 46, 0.3) !important; font-style: normal; }
 
 
-        /* ─── SPORTOWA SIATKA W TLE ─── */
+        
         body {
             background: 
                 linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
@@ -331,7 +330,7 @@
             background-size: 30px 30px, 30px 30px, 100% 100% !important;
             background-attachment: fixed !important;
         }
-        /* ─── PŁYNĄCY GRADIENT W TYTULE ─── */
+       
         h1 {
             background: linear-gradient(270deg, #00E5FF, #69F0AE, #007BFF, #00E5FF);
             background-size: 300% 300%;
@@ -339,7 +338,7 @@
             -webkit-text-fill-color: transparent;
             animation: gradientTitle 8s ease infinite;
             filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.3));
-            color: transparent; /* Zabezpieczenie nadpisujące stary kolor */
+            color: transparent; 
         }
         @keyframes gradientTitle {
             0% { background-position: 0% 50%; }
@@ -347,7 +346,7 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* ─── WYODRĘBNIENIE STREFY TYPÓW (BET SLIP) ─── */
+        
         .players-grid {
             background: rgba(0, 0, 0, 0.25);
             padding: 15px;
@@ -356,12 +355,12 @@
             box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
             margin-top: 15px;
         }
-        /* Delikatna korekta na telefony */
+       
         @media (max-width: 768px) {
             .players-grid { padding: 10px; margin-top: 10px; }
         }
 
-        /* ─── MIĘKKIE POJAWIANIE SIĘ MECZÓW ─── */
+       
         @keyframes slideUpFade {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -370,7 +369,6 @@
             animation: slideUpFade 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        /* ─── ODDYCHAJĄCA MGŁA W TLE ─── */
         body::before {
             content: ''; position: fixed; top: -20%; left: -10%; width: 140%; height: 140%;
             background: radial-gradient(circle, rgba(0, 229, 255, 0.04) 0%, transparent 60%);
@@ -382,10 +380,10 @@
             100% { transform: scale(1.05); opacity: 1; } 
         }
 
-        /* ─── BŁYSK FLESZA NA MECZACH ─── */
+        
         .match {
             position: relative;
-            overflow: hidden; /* Zatrzymuje światło wewnątrz karty */
+            overflow: hidden; 
         }
         .match::before {
             content: ''; position: absolute; top: 0; left: -150%;
@@ -517,15 +515,15 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-// ─── FIREBASE ───────────────────────────────────────────────────────────────
+//FIREBASE 
 const firebaseConfig = {
-    // 🔴🔴🔴 WAŻNE: PODMIEŃ TEN ADRES NA SWÓJ LINK DO TESTOWEJ BAZY FIREBASE! 🔴🔴🔴
-    databaseURL: "https://mundial2026-ca6f0-default-rtdb.europe-west1.firebasedatabase.app/"
+    // Projekt archiwalny - baza Firebase została wyłączona
+    databaseURL: "https:/LINK-BAZY-FIREBASE.firebasedatabase.app/"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ─── HASŁA GRACZY (WPISZ NA TWARDO) ──────────────────────────────────────────
+
 const haslaGraczy = {
     "p1": "wioletta3293",    
     "p2": "Twistcar1",      
@@ -539,7 +537,7 @@ const haslaGraczy = {
     "admin": "mojetajnehaslo" 
 };
 
-// ─── GRACZE ──────────────────────────────────────────────────────────────────
+// GRACZE 
 const gracze = [
     { id:'p1', name:'Wioletta' },
     { id:'p2', name:'Artur' },
@@ -586,7 +584,7 @@ function wyloguj() {
     location.reload();
 }
 
-// ─── SŁOWNIK FLAG ─────────────────────────────────────────────────────────────
+//  SŁOWNIK FLAG
 const flagi = {
     "Meksyk": "mx", "RPA": "za", "Korea Płd.": "kr", "Czechy": "cz",
     "Kanada": "ca", "Bośnia i Herce.": "ba", "USA": "us", "Paragwaj": "py",
@@ -602,7 +600,7 @@ const flagi = {
     "Ghana": "gh", "Panama": "pa", "Uzbekistan": "uz", "Kolumbia": "co"
 };
 
-// ─── PEŁNY HARMONOGRAM ───────────────────────────────────────────────────────
+// HARMONOGRAM
 const harmonogram = [
     { id:1,  dom:"Meksyk",       wyjazd:"RPA",                  data:"2026-06-11T19:00:00Z", godzPL:"21:00", stage:"Faza grupowa", group:"A", kolejka:1, venue:"Mexico City",            dzien:"Czw, 11 cze" },
     { id:2,  dom:"Korea Płd.",   wyjazd:"Czechy",               data:"2026-06-12T02:00:00Z", godzPL:"04:00", stage:"Faza grupowa", group:"A", kolejka:1, venue:"Guadalajara",            dzien:"Pt, 12 cze" },
@@ -715,12 +713,12 @@ const harmonogram = [
     { id:104, dom:"Hiszpania", wyjazd:"Argentyna", data:"2026-07-19T19:00:00Z", godzPL:"21:00", stage:"Finał", group:null, kolejka:null, venue:"Nowy Jork/New Jersey", dzien:"Nie, 19 lip" }
 ];
 
-// ─── STAN NAWIGACJI ───────────────────────────────────────────────────────────
+
 const stages = ['Faza grupowa','1/16 finału','1/8 finału','Ćwierćfinały','Półfinały','Finał'];
 let currentStage = '1/16 finału';
 let currentDay = 'aktualne'; 
 
-// ─── KOLORY GRUP ──────────────────────────────────────────────────────────────
+
 const groupColors = {
     "A": { text: "#E0E0E0", bg: "rgba(224, 224, 224, 0.15)", border: "rgba(224, 224, 224, 0.3)" },
     "B": { text: "#448AFF", bg: "rgba(68, 138, 255, 0.15)", border: "rgba(68, 138, 255, 0.3)" },
@@ -738,25 +736,24 @@ const groupColors = {
 
 
 
-// ─── INTELIGENTNE WYKRYWANIE ETAPU ────────────────────────────────────────────
+
 function getAktywnyEtapTurnieju() {
     const dzis = new Date();
     const dzisStr = dzis.toDateString();
 
-    // 1. Sprawdza, czy dzisiaj są jakieś mecze
+   
     const dzisiejsze = harmonogram.filter(m => new Date(m.data).toDateString() === dzisStr);
     if (dzisiejsze.length > 0) return dzisiejsze[0].stage;
 
-    // 2. Jeśli dzisiaj jest dzień przerwy, szuka najbliższego przyszłego meczu
+    
     const przyszle = harmonogram.filter(m => new Date(m.data) > dzis);
     if (przyszle.length > 0) return przyszle[0].stage;
 
-    // 3. Jeśli turniej się zakończył
+   
     return 'Finał';
 }
     
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+
 function init() {
     let myName = myPlayerId === 'admin' ? 'Administratorze 👑' : gracze.find(g => g.id === myPlayerId)?.name || '';
     document.getElementById('welcome-msg').innerText = `Witaj, ${myName} 👋`;
@@ -818,7 +815,7 @@ function setDay(d) {
     renderMatches();
 }
 
-// ─── GENEROWANIE MECZÓW ───────────────────────────────────────────────────────
+
 function renderMatches() {
     const stageMecze = harmonogram.filter(m => m.stage === currentStage);
     
@@ -877,7 +874,7 @@ function renderMatches() {
             if (mecz.group) {
                 tagHTML = `<span class="group-tag" style="background: ${gc.bg}; color: ${gc.text}; border: 1px solid ${gc.border};">Gr. ${mecz.group}</span>`;
             } else {
-                // ─── HIERARCHIA KOLORÓW FAZY PUCHAROWEJ ───
+              
                 let bg = "rgba(255,200,0,0.15)", col = "#FFD600", bord = "rgba(255,200,0,0.3)", shadow = "none";
                 let mnoznikBadge = ""; 
                 let nazwaEtapu = mecz.stage; 
@@ -953,7 +950,7 @@ function renderMatches() {
     obliczPunkty();
 }
 
-// ─── FIREBASE SYNC ────────────────────────────────────────────────────────────
+
 let latestSnapshot = {};
 
 function listenFirebase() {
@@ -973,7 +970,7 @@ function syncFromFirebaseSnapshot() {
         }
     });
 }
-// ─── LICZENIE PUNKTÓW I UPRAWNIENIA ──────────────────────────────────────────
+
 
 function obliczPunkty() {
     let punkty = gracze.map(() => 0);
@@ -1003,14 +1000,12 @@ function obliczPunkty() {
         const czasRozpoczecia = new Date(mecz.data);
         const czasZakonczenia = new Date(czasRozpoczecia.getTime() + 115 * 60000); 
 
-        // ─── 🔴 NOWOŚĆ: MNOŻNIK PUNKTÓW W ZALEŻNOŚCI OD ETAPU ───
-        // ─── MNOŻNIK PUNKTÓW ───
+        
         let mnoznik = 1;
         if (mecz.stage === 'Ćwierćfinały') mnoznik = 2;
         else if (mecz.stage === 'Półfinały') mnoznik = 3;
         else if (mecz.stage === 'Finał') mnoznik = 4; 
-        // ────────────────────────────────────────────────────────
-
+        
         if (statusEl) {
             if (realA !== '' && realB !== '') {
                 statusEl.innerHTML = '<span class="status-ended">ZAKOŃCZONY</span>';
@@ -1069,7 +1064,7 @@ function obliczPunkty() {
                 
                 if (ptsEl) {
                     ptsEl.innerText = currentPts + " pkt";
-                    // Poprawka kolorowania: sprawdzamy, czy gracz zdobył maksa (3 x mnożnik) lub część (1 x mnożnik)
+                   
                     ptsEl.className = "match-points " + (currentPts === (3 * mnoznik) ? "exact" : (currentPts === (1 * mnoznik) ? "partial" : ""));
                 }
 
@@ -1118,7 +1113,7 @@ function obliczPunkty() {
 
     
     
-// ─── OBSŁUGA CZATU I REAKCJI ──────────────────────────────────────────────────
+// OBSŁUGA CZATU I REAKCJI
 
 let scrollPosition = 0;
 
@@ -1148,7 +1143,7 @@ function toggleChat() {
     chat.style.display = isHidden ? 'flex' : 'none';
     
     if (isHidden) {
-        // Zapisujemy, w którym miejscu na stronie dokładnie jesteś
+        
         scrollPosition = window.scrollY;
         
         document.body.style.position = 'fixed';
@@ -1158,7 +1153,7 @@ function toggleChat() {
         
         scrollToBottom();
     } else {
-        // Odmrożenie tła po zamknięciu czatu
+       
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.width = '';
@@ -1211,7 +1206,7 @@ function listenChat() {
             const div = document.createElement('div');
             div.className = 'msg ' + (isMe ? 'msg-me' : 'msg-other');
             
-            // Renderowanie reakcji
+           
             let reactsHtml = '<div class="reactions-bar">';
             const emojis = ['👍', '😂', '🔥', '🤡', '⚽'];
             
@@ -1227,7 +1222,7 @@ function listenChat() {
                 }
             }
             
-            // Picker (wysuwany pasek z emotkami)
+          
             reactsHtml += `<span class="add-react-btn" onclick="event.stopPropagation(); toggleChatPicker(this)">➕</span>`;
             reactsHtml += `<div class="react-picker">`;
             emojis.forEach(e => {
@@ -1235,7 +1230,7 @@ function listenChat() {
             });
            reactsHtml += `</div></div>`;
 
-            // Przygotowanie cytatu
+            
             const bezpiecznyTekst = msg.text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
             let cytatHtml = '';
             if (msg.reply) {
@@ -1247,7 +1242,6 @@ function listenChat() {
                 `;
             }
 
-            // Przycisk Odpowiedz
             let przyciskOdpowiedz = `
                 <div style="text-align: ${isMe ? 'right' : 'left'}; margin-top: 4px;">
                     <button onclick="ustawOdpowiedz('${msg.authorName}', '${bezpiecznyTekst}')" 
@@ -1286,7 +1280,7 @@ function toggleReact(msgId, selectedEmoji) {
         let updates = {};
         let hadThisEmoji = false;
         
-        // Pętla sprawdza wszystkie emotki i usuwa Twoje imię z innych, które wcześniej kliknąłeś
+       
         const emojis = ['👍', '😂', '🔥', '🤡', '⚽'];
         emojis.forEach(e => {
             if (reacts[e] && reacts[e][myPlayerId]) {
@@ -1295,7 +1289,7 @@ function toggleReact(msgId, selectedEmoji) {
             }
         });
         
-        // Jeśli kliknąłeś nową emotkę, dodaje ją. Jeśli kliknąłeś tę samą co wcześniej - tylko ją usuwa (odkliknięcie).
+        
         if (!hadThisEmoji) {
             updates[`${selectedEmoji}/${myPlayerId}`] = true;
         }
@@ -1312,19 +1306,19 @@ function formatMessageTime(timestamp) {
     
     const timeStr = msgDate.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
     
-    // Ten sam dzień: samo "20:45"
+    
     if (msgDate.toDateString() === now.toDateString()) {
         return timeStr;
     }
     
     const diffDays = Math.floor((now - msgDate) / (1000 * 60 * 60 * 24));
     
-    // Inny dzień, ale w tym samym tygodniu (do 6 dni wstecz): "Wt, 20:45"
+    
     if (diffDays < 7) {
         const dni = ['Ndz', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob'];
         return `${dni[msgDate.getDay()]}, ${timeStr}`;
     } 
-    // Dawniej: "2 cze, 20:45"
+  
     else {
         const miesiace = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
         return `${msgDate.getDate()} ${miesiace[msgDate.getMonth()]}, ${timeStr}`;
@@ -1340,12 +1334,12 @@ function scrollToBottom() {
 setInterval(() => { syncFromFirebaseSnapshot(); obliczPunkty(); }, 5000);
 
 
-// ─── INTELIGENTNA BLOKADA POMNIEJSZANIA PONIŻEJ 100% ────────────────────────
+
 let startDistance = 0;
 
 document.addEventListener('touchstart', function (event) {
     if (event.touches.length === 2) {
-        // Mierzymy początkowy rozstaw palców (odległość między dwoma punktami)
+      
         startDistance = Math.hypot(
             event.touches[0].pageX - event.touches[1].pageX,
             event.touches[0].pageY - event.touches[1].pageY
@@ -1355,32 +1349,31 @@ document.addEventListener('touchstart', function (event) {
 
 document.addEventListener('touchmove', function (event) {
     if (event.touches.length === 2) {
-        // Mierzymy obecny rozstaw palców podczas ruchu
+     
         const currentDistance = Math.hypot(
             event.touches[0].pageX - event.touches[1].pageX,
             event.touches[0].pageY - event.touches[1].pageY
         );
         
-        // Jeśli obecny dystans jest mniejszy niż początkowy -> użytkownik ZSUWA palce (pomniejsza ekran)
+      
         const isZoomingOut = currentDistance < startDistance;
         
-        // Sprawdzamy, czy strona jest już w swoim normalnym rozmiarze (około 1.0)
-        // Dajemy zapas 1.02 na drobne błędy zaokrągleń w przeglądarkach
+        
         const isAtMinimumZoom = window.visualViewport ? window.visualViewport.scale <= 1.02 : true;
 
-        // Jeśli użytkownik pomniejsza, a strona osiągnęła już stan wyjściowy -> STOP
+     
         if (isZoomingOut && isAtMinimumZoom) {
             event.preventDefault();
         }
         
-        startDistance = currentDistance; // Aktualizujemy dystans do płynnego liczenia w locie
+        startDistance = currentDistance;
     }
 }, { passive: false });
 
-// Dodatkowe, twarde zabezpieczenie dedykowane dla Apple Safari (iOS)
+
 document.addEventListener('gesturechange', function (event) {
     const isAtMinimumZoom = window.visualViewport ? window.visualViewport.scale <= 1.02 : true;
-    // event.scale < 1.0 oznacza, że użytkownik wykonuje gest uszczypnięcia do wewnątrz
+   
     if (event.scale < 1.0 && isAtMinimumZoom) {
         event.preventDefault();
     }
